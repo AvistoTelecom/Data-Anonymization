@@ -13,18 +13,9 @@ import java.util.stream.Stream;
  */
 public final class StringGenerator {
 
-    private static final String VOWEL = "aeiouy";
-
-    private static final String CONSONANT = "zrtpqsdfghjklmwxcvbn";
-
     private static final String ALPHABET = "aeiouyzrtpqsdfghjklmwxcvbn";
-
-    private static final String  NUMBER = "0123456789";
-
     public static final int DEFAULT_MIN_LENGTH = 3;
     public static final int DEFAULT_MAX_LENGTH = 12;
-    public static final int DEFAULT_NUMBER_MIN_LENGTH = 1;
-    public static final int DEFAULT_NUMBER_MAX_LENGTH = 10;
     public static final int DEFAULT_MIN_SIZE = 1;
     public static final int DEFAULT_MAX_SIZE = 10;
 
@@ -52,21 +43,21 @@ public final class StringGenerator {
     }
 
     /**
-     * generate a string of number randomly in a size between minLength and maxLength
-     * @param minLength min size of the string
-     * @param maxLength min size of the string
-     * @return return a string of number
+     * generate a string of number randomly in a minValue and maxValue <br/>
+     * if the value doesn't fill all digits it will complete it with much 0 at the beginning
+     * @param minValue min value of the string
+     * @param maxValue max value of the string
+     * @param digits length of the string
+     * @return return a string of number of size digits
      */
-    public static String generateNumber(int minLength, int maxLength) {
-        int size = NumberGenerator.generateInt(minLength, maxLength + 1);
+    public static String generateNumber(int minValue, int maxValue, int digits) {
+        if ((1 << digits) <= maxValue) throw new IllegalArgumentException("not enough number of digits to represent max value");
+        String value = NumberGenerator.generateInt(minValue, maxValue + 1).toString();
         String result = "";
-        int valueToPick;
-
-        for (int i = 0; i < size; i++) {
-            valueToPick = NumberGenerator.generateInt(0, NUMBER.length());
-            result = result.concat(String.valueOf(NUMBER.charAt(valueToPick)));
+        for (int i = value.length(); i < digits; i++) {
+            result = result.concat("0");
         }
-        return result;
+        return result.concat(value);
     }
 
     /**
@@ -117,53 +108,11 @@ public final class StringGenerator {
     }
 
     /**
-     * generate a random Stream of String that alternate between vowel and consonant
-     * @param size the size of the Stream to return
-     * @return random string with vowel and consonant alternating with a size between [ 3, 12 ]
-     */
-    public static Stream<String> generateStrings(int size) {
-        return generateStrings(size, DEFAULT_MIN_LENGTH, DEFAULT_MAX_LENGTH);
-    }
-
-    /**
-     * generate a random Stream of String that alternate between vowel and consonant <br/>
-     * to generate a specific length, choose a value where minLength = maxLength
-     * @param size the size of the Stream to return
-     * @param minLength min length of the string to generate
-     * @param maxLength max legth of the string to generate
-     * @return random string with vowel and consonant alternating with a size between [ minLength, maxLength ]
-     */
-    public static Stream<String> generateStrings(int size, int minLength, int maxLength) {
-        return generateStringStream(size, () -> generateString(minLength, maxLength));
-    }
-
-    /**
-     * generate a string of number randomly in a size between 1 and 15
+     * generate a string of number randomly between 0 and 9
      * @return return a string of number
      */
     public static String generateNumber() {
-        return generateNumber(DEFAULT_NUMBER_MIN_LENGTH, DEFAULT_NUMBER_MAX_LENGTH);
-    }
-
-    /**
-     * generate a Stream of String that represent numbers
-     * @param size number of value in the Stream
-     * @return Stream of numbers in string
-     */
-    public static Stream<String> generateNumbers(int size) {
-        return generateStringStream(size, StringGenerator::generateNumber);
-    }
-
-    /**
-     * generate a Stream of String that represent numbers, <br/>
-     * to generate a specific length, choose a value where minLength = maxLength
-     * @param size number of value in the Stream
-     * @param minLength the minLength that the number can be
-     * @param maxLength the maxLength that the number can be
-     * @return Stream of numbers in string
-     */
-    public static Stream<String> generateNumbers(int size, int minLength, int maxLength) {
-        return generateStringStream(size, () -> StringGenerator.generateNumber(minLength, maxLength));
+        return generateNumber(0, 9, 1);
     }
 
     /**
