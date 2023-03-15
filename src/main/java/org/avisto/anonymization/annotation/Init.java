@@ -2,7 +2,6 @@ package org.avisto.anonymization.annotation;
 
 
 import org.avisto.anonymization.anonymizer.Randomizer;
-import org.avisto.anonymization.model.enums.Truc;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
