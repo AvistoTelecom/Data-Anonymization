@@ -51,7 +51,7 @@ public final class StringGenerator {
      * @return return a string of number of size digits
      */
     public static String generateNumber(int minValue, int maxValue, int digits) {
-        if ((1 << digits) <= maxValue) throw new IllegalArgumentException("not enough number of digits to represent max value");
+        if (((int) Math.log10(maxValue) + 1) > digits || digits == 0) throw new IllegalArgumentException("not enough number of digits to represent max value");
         String value = NumberGenerator.generateInt(minValue, maxValue + 1).toString();
         String result = "";
         for (int i = value.length(); i < digits; i++) {
