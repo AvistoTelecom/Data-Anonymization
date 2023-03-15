@@ -27,7 +27,7 @@ public final class StringGenerator {
      * generate a random String with random length between [ minLength , maxLength ] <br/>
      * to generate a specific length, choose a value where minLength = maxLength
      * @param minLength min length of the string to generate
-     * @param maxLength max legth of the string to generate
+     * @param maxLength max length of the string to generate
      * @return random string with a size between [ minLength, maxLength ]
      */
     public static String generateString(int minLength, int maxLength) {
@@ -71,7 +71,7 @@ public final class StringGenerator {
      * . <br/>
      * . <br/>
      * ====================== <br/>
-     * @param path path to acces the file where datas are
+     * @param path path to access the file where data are
      * @return the selected random value
      */
     public static String generateStringFromFile(String path) {
@@ -90,29 +90,12 @@ public final class StringGenerator {
      * . <br/>
      * ====================== <br/>
      * @param size the size of the Stream to return
-     * @param path path to acces the file where datas are
+     * @param path path to access the file where data are
      * @return Stream of {size} randomly selected value in file
      */
     public static Stream<String> generateStringsFromFile(int size, String path) {
         addToFileValueIfNotExist(path);
         return generateStringsFromCollection(size, FILE_VALUE.get(path));
-    }
-
-
-    /**
-     * generate a random String that alternate between vowel and consonant
-     * @return random string with vowel and consonant alternating with a size between [ 3, 12 ]
-     */
-    public static String generateString() {
-        return generateString(DEFAULT_MIN_LENGTH, DEFAULT_MAX_LENGTH);
-    }
-
-    /**
-     * generate a string of number randomly between 0 and 9
-     * @return return a string of number
-     */
-    public static String generateNumber() {
-        return generateNumber(0, 9, 1);
     }
 
     /**
@@ -152,7 +135,7 @@ public final class StringGenerator {
 
     /**
      * add to the map the value of the file if it doesn't exist yet
-     * @param path path to acces the file where datas are
+     * @param path path to access the file where data are
      */
     private static void addToFileValueIfNotExist(String path) {
         if (!FILE_VALUE.containsKey(path)) {
@@ -162,7 +145,7 @@ public final class StringGenerator {
 
     /**
      * put on a Stream, line by line, all lines from the file
-     * @param  path to acces the file where datas are
+     * @param  path to access the file where data are
      * @return Stream of lines
      */
     private static List<String> getLinesFromFile(String path){
