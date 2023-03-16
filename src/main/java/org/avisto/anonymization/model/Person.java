@@ -2,8 +2,6 @@ package org.avisto.anonymization.model;
 
 import lombok.*;
 import org.avisto.anonymization.annotation.Anonyme;
-import org.avisto.anonymization.annotation.RandomizeNumber;
-import org.avisto.anonymization.model.enums.NumberType;
 
 import java.util.List;
 
