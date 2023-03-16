@@ -6,6 +6,7 @@ import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.interfaces.GenerableString;
 
 import java.util.Arrays;
+import java.util.List;
 
 public enum StringType implements GenerableString{
     STRING {
@@ -86,6 +87,20 @@ public enum StringType implements GenerableString{
                     StringGenerator.generateString(),
                     StringGenerator.generateString(3,7),
                     StringGenerator.generateString(2,3));
+        }
+    },
+    STRING_FROM_FILE {
+        @Override
+        @SuppressWarnings("unchecked")
+        public String getRandomValue(int minSize, int maxSize, int minLength, int maxLength, String path, String[] possibleValues) {
+            return StringGenerator.generateStringFromFile(path);
+        }
+    },
+    STRING_FROM_ARRAY {
+        @Override
+        @SuppressWarnings("unchecked")
+        public String getRandomValue(int minSize, int maxSize, int minLength, int maxLength, String path, String[] possibleValues) {
+            return StringGenerator.generateStringFromCollection(List.of(possibleValues));
         }
     };
     public static final int DEFAULT_LENGTH_BEHAVIOR = -1;
