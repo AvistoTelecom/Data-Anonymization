@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 public final class StringGenerator {
 
     private static final String ALPHABET = "aeiouyzrtpqsdfghjklmwxcvbn";
+    private static final String NUMBER = "0123456789";
     public static final int DEFAULT_MIN_LENGTH = 3;
     public static final int DEFAULT_MAX_LENGTH = 12;
     public static final int DEFAULT_MIN_SIZE = 1;
@@ -45,6 +46,14 @@ public final class StringGenerator {
     }
 
     /**
+     * generate a random String with random length between [ DEFAULT_MIN_LENGTH, DEFAULT_MAX_LENGTH ]
+     * @return random string with a size between [ DEFAULT_MIN_LENGTH, DEFAULT_MAX_LENGTH ]
+     */
+    public static String generateString() {
+        return generateString(DEFAULT_MIN_LENGTH, DEFAULT_MAX_LENGTH);
+    }
+
+    /**
      * generate a string of number randomly in a minValue and maxValue <br/>
      * if the value doesn't fill all digits it will complete it with much 0 at the beginning
      * @param minValue min value of the string
@@ -52,14 +61,27 @@ public final class StringGenerator {
      * @param digits length of the string
      * @return return a string of number of size digits
      */
-    public static String generateNumber(int minValue, int maxValue, int digits) {
+    public static String generateNumber(long minValue, long maxValue, int digits) {
         if (((int) Math.log10(maxValue) + 1) > digits || digits == 0) throw new IllegalArgumentException("not enough number of digits to represent max value");
-        String value = NumberGenerator.generateInt(minValue, maxValue + 1).toString();
+        String value = NumberGenerator.generateLong(minValue, maxValue + 1).toString();
         String result = "";
         for (int i = value.length(); i < digits; i++) {
             result = result.concat("0");
         }
         return result.concat(value);
+    }
+
+    /**
+     * generate a string of number randomly of size length <br/>
+     * @param length length of the string
+     * @return return a string of number of size length
+     */
+    public static String generateNumber(int length) {
+        char[] result = new char[length];
+        for (int i = 0; i < length; i++) {
+            result[i] = NUMBER.charAt(NumberGenerator.generateInt(0,10));
+        }
+        return String.valueOf(result);
     }
 
     /**
