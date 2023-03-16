@@ -23,13 +23,11 @@ public class Person {
 
     private String email;
 
-    @RandomizeNumber(type = NumberType.LONG, minValue = "0", maxValue = "95")
     private Long age;
 
 
     private Boolean haveChildren;
 
-    @RandomizeNumber(type = NumberType.DOUBLE_LIST, minValue = "9", maxValue = "10")
     private List<Double> salary;
 
 
