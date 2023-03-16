@@ -3,6 +3,10 @@ package org.avisto.anonymization.annotation;
 import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.StringType;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+@Retention(RetentionPolicy.RUNTIME)
 public @interface RandomizeString {
     StringType type();
     int minSize() default StringGenerator.DEFAULT_MIN_SIZE;
