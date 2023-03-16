@@ -14,11 +14,11 @@ import java.util.Objects;
 
 public class ObjectAnonymizer implements Randomizer {
     
-    public void anonymize(Object object) {
+    public Object anonymize(Object object) {
         try {
             checkIfAnonymizable(object);
             initializeObject(object);
-            randomize(object);
+            return randomize(object);
         } catch (Exception e) {
             throw new AnonymeException(e);
         }
