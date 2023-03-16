@@ -1,6 +1,7 @@
 package org.avisto.anonymization.model.enums;
 
 
+import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.interfaces.GenerableString;
@@ -93,6 +94,9 @@ public enum StringType implements GenerableString{
         @Override
         @SuppressWarnings("unchecked")
         public String getRandomValue(int minSize, int maxSize, int minLength, int maxLength, String path, String[] possibleValues) {
+            if (path == null || path.isEmpty()) {
+                throw new IllegalArgumentException("On STRING_FROM_FILE type, path must not be empty or null");
+            }
             return StringGenerator.generateStringFromFile(path);
         }
     },
@@ -100,6 +104,9 @@ public enum StringType implements GenerableString{
         @Override
         @SuppressWarnings("unchecked")
         public String getRandomValue(int minSize, int maxSize, int minLength, int maxLength, String path, String[] possibleValues) {
+            if (possibleValues == null || possibleValues.length == 0) {
+                throw new IllegalArgumentException("On STRING_FROM_ARRAY type, possibleValues must not be empty or null");
+            }
             return StringGenerator.generateStringFromCollection(List.of(possibleValues));
         }
     };

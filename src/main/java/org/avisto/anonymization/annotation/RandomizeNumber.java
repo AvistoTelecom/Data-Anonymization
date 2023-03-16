@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface RandomizeNumber {
 
-    NumberType type();
+    NumberType value();
     String minValue() default NumberType.BEHAVIOR;
     String maxValue() default NumberType.BEHAVIOR;
     int minSize() default NumberGenerator.MIN_SIZE_COLLECTION;

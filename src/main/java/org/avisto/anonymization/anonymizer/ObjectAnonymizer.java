@@ -84,7 +84,7 @@ public class ObjectAnonymizer implements Randomizer {
                 annotation,
                 object,
                 field,
-                annotation.type().getRandomValue(
+                annotation.value().getRandomValue(
                         annotation.minValue(),
                         annotation.maxValue(),
                         annotation.minSize(),
@@ -97,7 +97,7 @@ public class ObjectAnonymizer implements Randomizer {
                 annotation,
                 object,
                 field,
-                annotation.type().getRandomValue(
+                annotation.value().getRandomValue(
                         annotation.minSize(),
                         annotation.maxSize(),
                         annotation.minLength(),
@@ -109,7 +109,7 @@ public class ObjectAnonymizer implements Randomizer {
     }
 
     @Override
-    public Object randomize(Object object) throws InvocationTargetException, IllegalAccessException {
+    public Object randomize(Object object) {
         Class<?> clazz = object.getClass();
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(RandomizeNumber.class)) {
