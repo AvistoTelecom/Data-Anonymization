@@ -85,16 +85,19 @@ public final class StringGenerator {
     }
 
     /**
-     * select a random value from a file,
+     * select a random value from a file, <br/>
      * the file must match this format: <br/>
      * ====================== <br/>
      * data1 <br/>
      * data2 <br/>
      * data3 <br/>
-     * . <br/>
-     * . <br/>
-     * . <br/>
+     * e <br/>
+     * t <br/>
+     * c <br/>
      * ====================== <br/>
+     * WARNING : it save the content of the file on a map, on consecutive calls,
+     * the file will not be re-opened each time, so if the path didn't change and the content of the file changed,
+     * it will not handle changes
      * @param path path to access the file where data are
      * @return the selected random value
      */
@@ -104,42 +107,12 @@ public final class StringGenerator {
     }
 
     /**
-     * select a Stream of random values from a file <br/>
-     * ====================== <br/>
-     * data1 <br/>
-     * data2 <br/>
-     * data3 <br/>
-     * . <br/>
-     * . <br/>
-     * . <br/>
-     * ====================== <br/>
-     * @param size the size of the Stream to return
-     * @param path path to access the file where data are
-     * @return Stream of {size} randomly selected value in file
-     */
-    public static Stream<String> generateStringsFromFile(int size, String path) {
-        addToFileValueIfNotExist(path);
-        return generateStringsFromCollection(size, FILE_VALUE.get(path));
-    }
-
-    /**
      * select a random value in the parameter origin
      * @param origin List of possible value
      * @return the random value selected in origin
      */
     public static String generateStringFromCollection(List<String> origin) {
         return origin.get(NumberGenerator.generateInt(0, origin.size()));
-    }
-
-    /**
-     * select randomly in the parameter origin, {size} value in origin to generate the Stream, <br/>
-     * there can be the same value selected multiple time
-     * @param size the size of the Stream to return
-     * @param origin Stream of possible value
-     * @return Stream of {size} randomly selected value in origin
-     */
-    public static Stream<String> generateStringsFromCollection(int size, List<String> origin) {
-        return generateStringStream(size, () ->  generateStringFromCollection(origin) );
     }
 
     /**
