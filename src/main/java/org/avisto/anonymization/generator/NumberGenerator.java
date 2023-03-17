@@ -1,9 +1,6 @@
 package org.avisto.anonymization.generator;
 
-import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 /**
  * Class that generate all type of number with random basis
