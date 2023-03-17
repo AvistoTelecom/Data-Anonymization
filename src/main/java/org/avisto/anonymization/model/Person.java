@@ -7,6 +7,12 @@ import org.avisto.anonymization.annotation.RandomizeString;
 import org.avisto.anonymization.model.enums.NumberType;
 import org.avisto.anonymization.model.enums.StringType;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Stream;
+
 
 @Getter
 @Setter
@@ -30,7 +36,7 @@ public class Person {
     private String phone;
 
     @RandomizeString(StringType.LICENSE_PLATE)
-    private String licensePlate;
+    private LinkedList<String> licensePlate;
 
     @RandomizeString(StringType.URL)
     private String url;
@@ -39,12 +45,12 @@ public class Person {
     private String number;
 
     @RandomizeString(value = StringType.STRING_FROM_FILE, path = "src/main/resources/data_test.txt")
-    private String file;
+    private ArrayList<String> file;
 
     @RandomizeString(value = StringType.STRING_FROM_ARRAY, possibleValues = {"hello", "world", "I", "am", "new"})
     private String array;
 
     @RandomizeNumber(NumberType.LONG)
-    private Long age;
+    private List<Long> age;
 
 }

@@ -8,12 +8,19 @@ import org.avisto.anonymization.annotation.RandomizeString;
 import org.avisto.anonymization.exception.AnonymeException;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.SetterGenerationException;
+import org.avisto.anonymization.generator.NumberGenerator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ObjectAnonymizer implements Randomizer {
     
@@ -80,32 +87,44 @@ public class ObjectAnonymizer implements Randomizer {
     }
 
     private void numberBehavior(Object object, Field field, RandomizeNumber annotation) {
+        Object newValue = genNewValue(field.getType(),
+                () -> annotation.value().getRandomValue(
+                        annotation.minValue(),
+                        annotation.maxValue()),
+                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
         callSetterMethodHandlingException(
                 annotation,
                 object,
                 field,
-                annotation.value().getRandomValue(
-                        annotation.minValue(),
-                        annotation.maxValue(),
-                        annotation.minSize(),
-                        annotation.maxSize()
-                )
-        );
+                newValue);
     }
     private void stringBehavior(Object object, Field field, RandomizeString annotation) {
-        callSetterMethodHandlingException(
-                annotation,
-                object,
-                field,
-                annotation.value().getRandomValue(
-                        annotation.minSize(),
-                        annotation.maxSize(),
+        Object newValue = genNewValue(field.getType(),
+                () -> annotation.value().getRandomValue(
                         annotation.minLength(),
                         annotation.maxLength(),
                         annotation.path(),
-                        annotation.possibleValues()
-                )
-        );
+                        annotation.possibleValues()),
+                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
+
+        callSetterMethodHandlingException(
+                annotation,
+                object,
+                field,
+                newValue);
+    }
+
+    private <T> Object genNewValue(Class<?> fieldType, Supplier<T> supplier, int size) {
+        if (!(Iterable.class.isAssignableFrom(fieldType))) {
+            return supplier.get();
+        } else if (ArrayList.class.isAssignableFrom(fieldType)) {
+            return Stream.generate(supplier).limit(size).collect(Collectors.toCollection(ArrayList::new));
+        } else if (LinkedList.class.isAssignableFrom(fieldType)) {
+            return Stream.generate(supplier).limit(size).collect(Collectors.toCollection(LinkedList::new));
+        } else if (List.class.isAssignableFrom(fieldType)) {
+            return Stream.generate(supplier).limit(size).collect(Collectors.toList());
+        } else throw new BadUseAnnotationException("Type not supported yet");
+
     }
 
     @Override
