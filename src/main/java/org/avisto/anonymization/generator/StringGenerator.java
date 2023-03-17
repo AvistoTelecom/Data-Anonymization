@@ -116,21 +116,6 @@ public final class StringGenerator {
     }
 
     /**
-     * generate a Stream of string, <br/>
-     * the way to generate string is define in the supplier
-     * @param size size of the Stream to return
-     * @param supplier behavior of string generation
-     * @return Stream of string generate with the supplier
-     */
-    public static Stream<String> generateStringStream(int size, Supplier<String> supplier) {
-        String[] result = new String[size];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = supplier.get();
-        }
-        return Arrays.stream(result);
-    }
-
-    /**
      * add to the map the value of the file if it doesn't exist yet
      * @param path path to access the file where data are
      */

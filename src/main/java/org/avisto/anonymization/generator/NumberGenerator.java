@@ -107,21 +107,6 @@ public final class NumberGenerator {
     }
 
     /**
-     * generate a stream of Number <br/>
-     * the way to generate Number is define in the supplier
-     * @param size number of value
-     * @param supplier behavior of Number generation
-     * @return a stream of Number
-     */
-    public static Stream<Number> generateNumberStream(int size, Supplier<Number> supplier) {
-        Number[] res = new Number[size];
-        for (int i = 0; i < res.length; i++) {
-            res[i] = supplier.get();
-        }
-        return Arrays.stream(res);
-    }
-
-    /**
      * this class can't be instantiated
      */
     private NumberGenerator() {
