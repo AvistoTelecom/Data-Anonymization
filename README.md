@@ -42,9 +42,7 @@ public class Main {
     public static void main(String[] args) {
         Person p = new Person();  // create a new Person
         ObjectAnonymizer oa = new ObjectAnonymizer();  // instance of objectAnonymizer 
-        Person personAnonimized = (Person) oa.anonymize(p);  // apply anonymization to p
-        // note that anonymize return an object which is p modified
-        // so p and personAnonymized have the same reference
+        oa.anonymize(p);  // apply anonymization to p
     }
 }
 ````
