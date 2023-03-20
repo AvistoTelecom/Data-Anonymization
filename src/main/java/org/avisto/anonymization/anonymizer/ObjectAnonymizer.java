@@ -12,10 +12,7 @@ import org.avisto.anonymization.generator.NumberGenerator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,10 +23,18 @@ import java.util.stream.Stream;
  */
 public class ObjectAnonymizer implements Randomizer {
     
-    public Object anonymize(Object object) {
+    public <T> void anonymize(T object) {
         try {
             checkIfAnonymizable(object);
-            return randomize(object);
+            randomize(object);
+        } catch (Exception e) {
+            throw new AnonymeException(e);
+        }
+    }
+
+    public <T> void anonymize(Iterable<T> objectCollection) {
+        try {
+            objectCollection.forEach(this::anonymize);
         } catch (Exception e) {
             throw new AnonymeException(e);
         }
