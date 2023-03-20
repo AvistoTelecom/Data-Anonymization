@@ -1,5 +1,9 @@
 package org.avisto.anonymization.generator;
 
+/**
+ * @author desaintpern
+ * Static Class that have methods to give random boolean
+ */
 public final class BooleanGenerator {
 
     /**

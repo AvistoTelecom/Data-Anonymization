@@ -2,7 +2,6 @@ package org.avisto.anonymization.anonymizer;
 
 
 import org.avisto.anonymization.annotation.Anonyme;
-import org.avisto.anonymization.annotation.Init;
 import org.avisto.anonymization.annotation.RandomizeNumber;
 import org.avisto.anonymization.annotation.RandomizeString;
 import org.avisto.anonymization.exception.AnonymeException;
@@ -13,7 +12,6 @@ import org.avisto.anonymization.generator.NumberGenerator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,12 +20,15 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * @author desaintpern
+ * Class that analyse and randomize object correctly annotated
+ */
 public class ObjectAnonymizer implements Randomizer {
     
     public Object anonymize(Object object) {
         try {
             checkIfAnonymizable(object);
-            initializeObject(object);
             return randomize(object);
         } catch (Exception e) {
             throw new AnonymeException(e);
@@ -45,15 +46,6 @@ public class ObjectAnonymizer implements Randomizer {
             throw new AnonymeException("The class "
                     + clazz.getSimpleName()
                     + " is not annotated with Anonyme");
-        }
-    }
-
-    private void initializeObject(Object object) throws InvocationTargetException, IllegalAccessException {
-        Class<?> clazz = object.getClass();
-        for (Method method : clazz.getDeclaredMethods()) {
-            if (method.isAnnotationPresent(Init.class)) {
-                method.invoke(object);
-            }
         }
     }
 

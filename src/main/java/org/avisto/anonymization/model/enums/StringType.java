@@ -7,6 +7,10 @@ import org.avisto.anonymization.model.enums.interfaces.GenerableString;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author desaintpern
+ * Enum that represent all String format randomizable
+ */
 public enum StringType implements GenerableString{
     STRING {
         @Override

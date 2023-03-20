@@ -3,6 +3,10 @@ package org.avisto.anonymization.model.enums;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.model.enums.interfaces.GenerableNumber;
 
+/**
+ * @author desaintpern
+ * Enum that represent all number type randomizable
+ */
 public enum NumberType implements GenerableNumber {
 
     INT {
