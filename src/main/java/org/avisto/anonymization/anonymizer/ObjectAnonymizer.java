@@ -6,7 +6,7 @@ import org.avisto.anonymization.annotation.RandomizeNumber;
 import org.avisto.anonymization.annotation.RandomizeString;
 import org.avisto.anonymization.exception.AnonymeException;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
-import org.avisto.anonymization.exception.SetterGenerationException;
+import org.avisto.anonymization.exception.MethodGenerationException;
 import org.avisto.anonymization.generator.NumberGenerator;
 
 import java.lang.annotation.Annotation;
@@ -14,8 +14,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author desaintpern
@@ -41,7 +39,7 @@ public class ObjectAnonymizer implements Randomizer {
     }
 
 
-    private void checkIfAnonymizable(Object object) {
+    private <T> void checkIfAnonymizable(T object) {
         if (Objects.isNull(object)) {
             throw new AnonymeException("The object to anonymize is null");
         }
@@ -54,18 +52,11 @@ public class ObjectAnonymizer implements Randomizer {
         }
     }
 
-    private void callSetterMethod(Object object, Field field, Object newValue) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Class<?> clazz = object.getClass();
-        String setterName = genSetterName(field);
-        clazz.getMethod(setterName, field.getType()).invoke(object, newValue);
-    }
-
-    private void callSetterMethodHandlingException(Annotation annotation, Object object, Field field, Object newValue) {
+    private <T> void callSetterMethod(Annotation annotation, T object, Field field, Object newValue) {
         try {
-            callSetterMethod(
-                    object,
-                    field,
-                    newValue);
+            Class<?> clazz = object.getClass();
+            String setterName = genSetterName(field);
+            clazz.getMethod(setterName, field.getType()).invoke(object, newValue);
         }
         catch (NumberFormatException | NoSuchMethodException e) {
             throw new BadUseAnnotationException(object.getClass(), field, annotation, e);
@@ -74,7 +65,9 @@ public class ObjectAnonymizer implements Randomizer {
             throw new BadUseAnnotationException("restrict access of " + field.getName() + " doesn't allow modification");
         }
         catch (InvocationTargetException e) {
-            throw new SetterGenerationException(field, e);
+
+            throw new MethodGenerationException(String.format("failed to call setter method of the field : '%s'%nplease be sure that there is a setter available for this field and is named set<Fieldname> with a unique parameter that the type is the same as the field",
+                    field), e);
         }
     }
 
@@ -83,49 +76,61 @@ public class ObjectAnonymizer implements Randomizer {
         return  "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
     }
 
-    private void numberBehavior(Object object, Field field, RandomizeNumber annotation) {
-        Object newValue = genNewValue(field.getType(),
+    @SuppressWarnings("unchecked")
+    private <T, R> R callGetterMethod(T object, Field field){
+        try {
+            return (R) object.getClass().getMethod(genGetterName(field)).invoke(object);
+        } catch (InvocationTargetException | NoSuchMethodException e) {
+            throw new MethodGenerationException(String.format("failed to call getter method of the field : '%s'%nplease be sure that there is a getter available for this field and is named get<Fieldname> with a no parameter",
+                    field),
+                    e);
+        } catch (IllegalAccessException e) {
+            throw new BadUseAnnotationException("restrict access of " + field.getName() + " doesn't allow modification");
+        }
+    }
+
+    private String genGetterName(Field field) {
+        String fieldName = field.getName();
+        return  "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+    }
+
+    private <T> void numberBehavior(T object, Field field, RandomizeNumber annotation) {
+        genNewValue(object,
+                field,
                 () -> annotation.value().getRandomValue(
                         annotation.minValue(),
                         annotation.maxValue()),
-                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
-        callSetterMethodHandlingException(
-                annotation,
-                object,
-                field,
-                newValue);
+                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                annotation);
     }
-    private void stringBehavior(Object object, Field field, RandomizeString annotation) {
-        Object newValue = genNewValue(field.getType(),
+    private <T> void stringBehavior(T object, Field field, RandomizeString annotation) {
+        genNewValue(object,
+                field,
                 () -> annotation.value().getRandomValue(
                         annotation.minLength(),
                         annotation.maxLength(),
                         annotation.path(),
                         annotation.possibleValues()),
-                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
-
-        callSetterMethodHandlingException(
-                annotation,
-                object,
-                field,
-                newValue);
+                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                annotation);
     }
 
-    private <T> Object genNewValue(Class<?> fieldType, Supplier<T> supplier, int size) {
-        if (!(Iterable.class.isAssignableFrom(fieldType))) {
-            return supplier.get();
-        } else if (ArrayList.class.isAssignableFrom(fieldType)) {
-            return Stream.generate(supplier).limit(size).collect(Collectors.toCollection(ArrayList::new));
-        } else if (LinkedList.class.isAssignableFrom(fieldType)) {
-            return Stream.generate(supplier).limit(size).collect(Collectors.toCollection(LinkedList::new));
-        } else if (List.class.isAssignableFrom(fieldType)) {
-            return Stream.generate(supplier).limit(size).collect(Collectors.toList());
-        } else throw new BadUseAnnotationException("Type not supported yet");
-
+    @SuppressWarnings("unchecked")
+    private <T> void genNewValue(T object ,Field field, Supplier<T> supplier, int size, Annotation annotation) {
+        if (callGetterMethod(object, field) != null) {
+            if (!(Iterable.class.isAssignableFrom(field.getType()))) {
+                callSetterMethod(annotation, object, field, supplier.get());
+            } else if (Collection.class.isAssignableFrom(field.getType())) {
+                Collection res = callGetterMethod(object, field);
+                for (int i = 0; i < size; i++) {
+                    res.add(supplier.get());
+                }
+            } else throw new BadUseAnnotationException("Type not supported yet");
+        }
     }
 
     @Override
-    public Object randomize(Object object) {
+    public <T> void randomize(T object) {
         Class<?> clazz = object.getClass();
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(RandomizeNumber.class)) {
@@ -137,6 +142,5 @@ public class ObjectAnonymizer implements Randomizer {
                 stringBehavior(object, field, annotation);
             }
         }
-        return object;
     }
 }
