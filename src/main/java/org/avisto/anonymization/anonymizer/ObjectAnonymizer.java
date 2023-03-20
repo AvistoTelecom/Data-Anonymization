@@ -115,7 +115,6 @@ public class ObjectAnonymizer implements Randomizer {
                 annotation);
     }
 
-    @SuppressWarnings("unchecked")
     private <T> void genNewValue(T object ,Field field, Supplier<T> supplier, int size, Annotation annotation) {
         if (callGetterMethod(object, field) != null) {
             if (!(Iterable.class.isAssignableFrom(field.getType()))) {
