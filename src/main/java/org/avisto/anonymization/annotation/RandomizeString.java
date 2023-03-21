@@ -18,4 +18,5 @@ public @interface RandomizeString {
     int maxLength() default StringType.DEFAULT_LENGTH_BEHAVIOR;
     String path() default "";
     String[] possibleValues() default {};
+    String pattern() default "[a-z]{5,12}";
 }

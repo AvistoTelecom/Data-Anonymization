@@ -8,6 +8,8 @@ import org.avisto.anonymization.exception.AnonymeException;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.MethodGenerationException;
 import org.avisto.anonymization.generator.NumberGenerator;
+import org.avisto.anonymization.model.enums.StringType;
+import org.avisto.rgxgen.RgxGen;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -20,6 +22,8 @@ import java.util.function.Supplier;
  * Class that analyse and randomize object correctly annotated
  */
 public class ObjectAnonymizer implements Randomizer {
+
+    private RgxGen rgxGen;
     
     public <T> void anonymize(T object) {
         try {
@@ -104,13 +108,15 @@ public class ObjectAnonymizer implements Randomizer {
                 annotation);
     }
     private <T> void stringBehavior(T object, Field field, RandomizeString annotation) {
+        if (annotation.value().equals(StringType.REGEX)) rgxGen = new RgxGen(annotation.pattern());
         genNewValue(object,
                 field,
                 () -> annotation.value().getRandomValue(
                         annotation.minLength(),
                         annotation.maxLength(),
                         annotation.path(),
-                        annotation.possibleValues()),
+                        annotation.possibleValues(),
+                        rgxGen),
                 NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
                 annotation);
     }
