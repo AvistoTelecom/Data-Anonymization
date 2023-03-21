@@ -34,6 +34,7 @@ public class Person {
     @RandomizeNumber(value = NumberType.LONG, minValue = "15", maxValue = "21", minSize = 3, maxSize = 6)
     private List<Long> longs;
 
+    /*  Getter and Setter necessary */
 }
 ````
 
@@ -46,10 +47,11 @@ public class Main {
     }
 }
 ````
-### NumberType
+### Enum NumberType
+**Enum that represent all handling number type generator.**
 <details>
     <summary>
-        <b>Available values</b>
+        Available values
     </summary>
 
 value:
@@ -59,10 +61,12 @@ value:
 - `DOUBLE`
 </details>
 
-### StringType
+### Enum StringType
+**Enum that represent all handling StringFormat generator.**
+
 <details>
     <summary>
-        <b>Available values</b>
+        Available values
     </summary>
 
 value:
@@ -76,14 +80,15 @@ value:
 - `STRING_FROM_FILE`
 - `NUMBER`
 - `STRING_FROM_ARRAY`
+- `REGEX`
 </details>
 
 
-### RandomizeNumber
+### Annotation RandomizeNumber
 
 <details>
     <summary>
-        <b>Parameters</b>
+        Parameters
     </summary>
 
 |     name | type       | is optional | default   | description                |
@@ -98,13 +103,13 @@ The default min (alt. max) value is the minimal (alt. maximal) value possible de
 
 The size of the collection is selected randomly between minSize and maxSize.
 
-minSize and maxSize are used only if the Filed is a collection
+minSize and maxSize are used only if the Filed is a collection.
 
 </details>
 
 <details>
     <summary>
-        <b>Parameters usage by StringType value</b>
+        Parameters usage by StringType value
     </summary>
 
 |   value | parameters                               | description     |
@@ -116,35 +121,38 @@ minSize and maxSize are used only if the Filed is a collection
 
 </details>
 
-### RandomizeString
+### Annotation RandomizeString
 
 <details>
     <summary>
-        <b>Parameters</b>
+        Parameters
     </summary>
 
-|           name | type            | is optional | default   | description                               |
-|---------------:|-----------------|-------------|-----------|-------------------------------------------|
-|          value | StringType      | false       | none      | behavior                                  |
-|      minLength | int             | true        | "default" | min length                                |
-|      maxLength | int             | true        | "default" | max length                                |
-|           path | String          | true        | ""        | path of the file where to get values      |
-| possibleValues | Array\<String\> | true        | {}        | array of different values that can be set |
-|        minSize | int             | true        | 1         | min size of the collection                |
-|        maxSize | int             | true        | 10        | max size of the collection                |
+|           name | type            | is optional | default         | description                               |
+|---------------:|-----------------|-------------|-----------------|-------------------------------------------|
+|          value | StringType      | false       | none            | behavior                                  |
+|      minLength | int             | true        | "default"       | min length                                |
+|      maxLength | int             | true        | "default"       | max length                                |
+|           path | String          | true        | ""              | path of the file where to get values      |
+| possibleValues | Array\<String\> | true        | {}              | array of different values that can be set |
+|        minSize | int             | true        | 1               | min size of the collection                |
+|        maxSize | int             | true        | 10              | max size of the collection                |
+|        pattern | String          | true        | "\[a-z\]{5,12}" | regex pattern                             |
 
 The default minLength (alt. maxLength) value is the minimal (alt. maximal) length possible depending on the StringType,
 the final length is selected randomly between minLength and MaxLength.
 
 The size of the collection is selected randomly between minSize and maxSize.
 
-minSize and maxSize are used only if the Filed is a collection
+minSize and maxSize are used only if the Filed is a collection.
+
+see supported regex pattern syntax [here](https://github.com/curious-odd-man/RgxGen#supported-syntax).
 
 </details>
 
 <details>
     <summary>
-        <b>Parameters usage by NumberType value</b>
+        Parameters usage by NumberType value
     </summary>
 
 |                  value | parameters                             | description                                                                               |
@@ -159,6 +167,7 @@ minSize and maxSize are used only if the Filed is a collection
 |       STRING_FROM_FILE | path, minSize, maxSize                 | select value from file                                                                    |
 |      STRING_FROM_ARRAY | possibleValues , minSize, maxSize      | select value from array                                                                   |
 |                 NUMBER | minLength, maxLength, minSize, maxSize | generate number as string                                                                 |
+|                  REGEX | pattern                                | generate string which respect the pattern                                                 |
 
 replace %s by a random string.
 
@@ -167,7 +176,7 @@ replace %s by a random string.
 
 ## Limitation
 
-Table of all handled type
+**Table of all handled type**
 
 | Single type |
 |------------:|
@@ -179,11 +188,13 @@ Table of all handled type
 
 | Collection |
 |-----------:|
-|       List |
-|  ArrayList |
-| LinkedList |
+|        all |
 
+The regex generation is based on library [RgxGen version 1.4](https://github.com/curious-odd-man/RgxGen/tree/1.4)
 
+Getter and Setter must be declared.
+
+If a field has null value it will stay null
 
 ## Contributing
 /!\ à compléter
