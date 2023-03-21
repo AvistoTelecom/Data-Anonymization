@@ -35,6 +35,7 @@ public class Person {
     private List<Long> longs;
 
     /*  Getter and Setter necessary */
+    /* Constructor */
 }
 ````
 
