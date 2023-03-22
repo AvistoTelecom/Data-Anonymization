@@ -119,6 +119,33 @@ public enum StringType implements GenerableString{
         public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
             return generator.generate();
         }
+    },
+    IPV4 {
+        @Override
+        @SuppressWarnings("unchecked")
+        public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
+            return String.format("%s.%s.%s.%s",
+                    NumberGenerator.generateInt(0, 256),
+                    NumberGenerator.generateInt(0, 256),
+                    NumberGenerator.generateInt(0, 256),
+                    NumberGenerator.generateInt(0, 256));
+        }
+    },
+        IPV6 {
+            @Override
+            @SuppressWarnings("unchecked")
+            public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
+
+                return String.format("%s:%s:%s:%s:%s:%s:%s:%s",
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)));
+            }
     };
     public static final int DEFAULT_LENGTH_BEHAVIOR = -1;
 }

@@ -169,19 +169,21 @@ see supported regex pattern syntax [here](https://github.com/curious-odd-man/Rgx
         Parameters usage by StringType value
     </summary>
 
-|                  value | parameters                             | description                                                                               |
-|-----------------------:|----------------------------------------|-------------------------------------------------------------------------------------------|
-|                 STRING | minLength, maxLength, minSize, maxSize | generate random string, the alphabet is \[a-z\]                                           |
-|                   TEXT | minLength, maxLength, minSize, maxSize | generate "Lorem ipsum" text                                                               |
-|                  EMAIL | minSize, maxSize                       | generate random email with format : %s.%s@%s.%s                                           |
-|                    URL | minSize, maxSize                       | generate random url with format : \[https, http\]://%s/%s/%s                              |
-|    PHONE_INTERNATIONAL | minSize, maxSize                       | generate international phone number                                                       |
-| SOCIAL_SECURITY_NUMBER | minSize, maxSize                       | generate random social security number with format : \[0,1\]\[0-9\]{2}\[01-12\]\[0-9\]{8} |
-|          LICENSE_PLATE | minSize, maxSize                       | generate license plat with format \[A-Z\]{2}-\[0-9\]{3}-\[A-Z\]{2}                        |
-|       STRING_FROM_FILE | path, minSize, maxSize                 | select value from file                                                                    |
-|      STRING_FROM_ARRAY | possibleValues , minSize, maxSize      | select value from array                                                                   |
-|                 NUMBER | minLength, maxLength, minSize, maxSize | generate number as string                                                                 |
-|                  REGEX | pattern                                | generate string which respect the pattern                                                 |
+|                  value | parameters                                           | description                                                                               |
+|-----------------------:|------------------------------------------------------|-------------------------------------------------------------------------------------------|
+|                 STRING | minLength, maxLength, minSize, maxSize               | generate random string, the alphabet is \[a-z\]                                           |
+|                   TEXT | minLength, maxLength, minSize, maxSize               | generate "Lorem ipsum" text                                                               |
+|                  EMAIL | minSize, maxSize                                     | generate random email with format : %s.%s@%s.%s                                           |
+|                    URL | minSize, maxSize                                     | generate random url with format : \[https, http\]://%s/%s/%s                              |
+|    PHONE_INTERNATIONAL | minSize, maxSize                                     | generate international phone number                                                       |
+| SOCIAL_SECURITY_NUMBER | minSize, maxSize                                     | generate random social security number with format : \[0,1\]\[0-9\]{2}\[01-12\]\[0-9\]{8} |
+|          LICENSE_PLATE | minSize, maxSize                                     | generate license plat with format \[A-Z\]{2}-\[0-9\]{3}-\[A-Z\]{2}                        |
+|       STRING_FROM_FILE | path, minSize, maxSize                               | select value from file                                                                    |
+|      STRING_FROM_ARRAY | possibleValues , minSize, maxSize                    | select value from array                                                                   |
+|                 NUMBER | minLength, maxLength, minSize, maxSize               | generate number as string                                                                 |
+|                  REGEX | pattern, minSize, maxSize                            | generate string which respect the pattern                                                 |
+|                   IPV4 | minSize, maxSize                                     | generate string which respect IPV4 format                                                 |
+|                   IPV6 | minSize, maxSize                                     | generate string which respect IPV6 format                                                 |
 
 replace %s by a random string.
 
