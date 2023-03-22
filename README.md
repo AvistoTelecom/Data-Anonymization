@@ -14,6 +14,12 @@ This library have for main purpose to randomize sensitive data using annotation.
 
 ### Code
 
+To allow the ObjectAnonymizer to anonymize your Object, the Class must be annotated with **@Anonyme**.
+
+Then all field that need to be anonymized must be annotated with **@StringType** or **@NumberType** depending on the field type.
+
+following an example of how to use the library.
+
 ````java
 
 @Anonyme
@@ -40,11 +46,18 @@ public class Person {
 ````
 
 ````java
+import org.avisto.anonymization.Person;
+
+import java.util.stream.Collectors;
+
 public class Main {
     public static void main(String[] args) {
         Person p = new Person();  // create a new Person
         ObjectAnonymizer oa = new ObjectAnonymizer();  // instance of objectAnonymizer 
         oa.anonymize(p);  // apply anonymization to p
+
+        List<Person> listPerson = Stream.generate(Person::new).limit(5).collect(Collectors.toList());
+        oa.anonymize(listPerson); // apply anonymization to all person in the list
     }
 }
 ````
@@ -110,7 +123,7 @@ minSize and maxSize are used only if the Filed is a collection.
 
 <details>
     <summary>
-        Parameters usage by StringType value
+        Parameters usage by NumberType value
     </summary>
 
 |   value | parameters                               | description     |
@@ -153,7 +166,7 @@ see supported regex pattern syntax [here](https://github.com/curious-odd-man/Rgx
 
 <details>
     <summary>
-        Parameters usage by NumberType value
+        Parameters usage by StringType value
     </summary>
 
 |                  value | parameters                             | description                                                                               |
@@ -193,7 +206,9 @@ replace %s by a random string.
 
 The regex generation is based on library [RgxGen version 1.4](https://github.com/curious-odd-man/RgxGen/tree/1.4)
 
-Getter and Setter must be declared.
+Getter and Setter must be declared with a name format: setFieldName, getFieldName. 
+
+This library work with default getter and setter build with lombok
 
 If a field has null value it will stay null
 
