@@ -1,9 +1,9 @@
 package org.avisto.anonymization.model.enums;
 
+import com.github.curiousoddman.rgxgen.RgxGen;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.interfaces.GenerableString;
-import org.avisto.rgxgen.RgxGen;
 
 import java.util.Arrays;
 import java.util.List;

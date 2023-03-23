@@ -1,6 +1,7 @@
 package org.avisto.anonymization.anonymizer;
 
 
+import com.github.curiousoddman.rgxgen.RgxGen;
 import org.avisto.anonymization.annotation.Anonyme;
 import org.avisto.anonymization.annotation.RandomizeNumber;
 import org.avisto.anonymization.annotation.RandomizeString;
@@ -9,7 +10,6 @@ import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.MethodGenerationException;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.model.enums.StringType;
-import org.avisto.rgxgen.RgxGen;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
