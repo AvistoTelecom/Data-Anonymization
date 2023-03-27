@@ -78,6 +78,13 @@ public enum StringType implements GenerableString{
             return "0" + StringGenerator.generateNumber(12);
         }
     },
+    PHONE_FR {
+        @Override
+        @SuppressWarnings("unchecked")
+        public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
+            return StringGenerator.generateStringFromCollection(Arrays.asList("06", "07")) + StringGenerator.generateNumber(8);
+        }
+    },
     URL {
         @Override
         @SuppressWarnings("unchecked")

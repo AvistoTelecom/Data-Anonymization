@@ -151,6 +151,17 @@ public class StringAnonymizationTest {
     }
 
     @Test
+    public void testPhoneFrValue() {
+        StringTestModel model = new StringTestModel(){
+            @RandomizeString(value = StringType.PHONE_FR, maxLength = StringTestModel.MAX_LENGTH, minLength = StringTestModel.MIN_LENGTH, minSize = StringTestModel.MIN_SIZE, maxSize = StringTestModel.MAX_SIZE, path = StringTestModel.PATH_TO_FILE, possibleValues = {"first"}, pattern = StringTestModel.PATTERN)
+            public String value;
+        };
+        init(model);
+        anonymizer.anonymize(model);
+        Assert.assertTrue(Pattern.matches("(06|07)[0-9]{8}", model.value));
+    }
+
+    @Test
     public void testLicensePlateValue() {
         StringTestModel model = new StringTestModel(){
             @RandomizeString(value = StringType.LICENSE_PLATE, maxLength = StringTestModel.MAX_LENGTH, minLength = StringTestModel.MIN_LENGTH, minSize = StringTestModel.MIN_SIZE, maxSize = StringTestModel.MAX_SIZE, path = StringTestModel.PATH_TO_FILE, possibleValues = {"first"}, pattern = StringTestModel.PATTERN)
