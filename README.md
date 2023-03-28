@@ -191,6 +191,11 @@ replace %s by a random string.
 
 </details>
 
+### Annotation SelfImplementation
+
+All method that are annotated with @SelfImplementation are called after randomizing attribute. Method must have no parameter and be public.
+
+This can be used if you want to make custom behavior on some field.
 
 ## Limitation
 

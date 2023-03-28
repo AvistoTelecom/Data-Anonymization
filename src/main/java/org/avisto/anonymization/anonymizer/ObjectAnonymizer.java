@@ -22,6 +22,7 @@ import com.github.curiousoddman.rgxgen.RgxGen;
 import org.avisto.anonymization.annotation.Anonyme;
 import org.avisto.anonymization.annotation.RandomizeNumber;
 import org.avisto.anonymization.annotation.RandomizeString;
+import org.avisto.anonymization.annotation.SelfImplementaion;
 import org.avisto.anonymization.exception.AnonymeException;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.MethodGenerationException;
@@ -31,6 +32,7 @@ import org.avisto.anonymization.model.enums.StringType;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -74,9 +76,9 @@ public class ObjectAnonymizer implements Randomizer {
     }
 
     private <T> void callSetterMethod(Annotation annotation, T object, Field field, Object newValue) {
+        Class<?> clazz = object.getClass();
+        String setterName = genSetterName(field);
         try {
-            Class<?> clazz = object.getClass();
-            String setterName = genSetterName(field);
             clazz.getMethod(setterName, field.getType()).invoke(object, newValue);
         }
         catch (NumberFormatException | NoSuchMethodException e) {
@@ -151,6 +153,16 @@ public class ObjectAnonymizer implements Randomizer {
         }
     }
 
+    private void callMethod(Object object, Method method) {
+        try {
+            method.invoke(object);
+        } catch (InvocationTargetException e) {
+            throw new BadUseAnnotationException(String.format("Method %s on class %s couldn't be called", method.getName(), object.getClass()));
+        } catch (IllegalAccessException e) {
+            throw new BadUseAnnotationException(String.format("Method %s on class %s can't be accessed, verify its accessibility is public", method.getName(), object.getClass()));
+        }
+    }
+
     @Override
     public <T> void randomize(T object) {
         Class<?> clazz = object.getClass();
@@ -162,6 +174,11 @@ public class ObjectAnonymizer implements Randomizer {
              else if (field.isAnnotationPresent(RandomizeString.class)) {
                 RandomizeString annotation = field.getAnnotation(RandomizeString.class);
                 stringBehavior(object, field, annotation);
+            }
+        }
+        for (Method method : clazz.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(SelfImplementaion.class)) {
+                callMethod(object, method);
             }
         }
     }
