@@ -1,0 +1,47 @@
+/*
+ *
+ */
+
+package model;
+
+import org.avisto.anonymization.annotation.Anonyme;
+import org.avisto.anonymization.annotation.RandomizeNumber;
+import org.avisto.anonymization.annotation.RandomizeString;
+import org.avisto.anonymization.model.enums.NumberType;
+import org.avisto.anonymization.model.enums.StringType;
+
+public class Model {
+
+    public static class ModelWithoutAnonyme {
+    }
+    @Anonyme
+    public static class ModelWithWrongAnnotation {
+        @RandomizeNumber(NumberType.LONG)
+        public String value;
+        public void setValue(String value) { this.value = value; }
+        public String getValue() { return value; }
+        public ModelWithWrongAnnotation(){
+            value = "hello";
+        }
+    }
+
+    @Anonyme
+    public static class ModelWithNoGetter {
+        @RandomizeString(StringType.STRING)
+        public String value;
+        public void setValue(String value) { this.value = value; }
+        public ModelWithNoGetter(){
+            value = "hello";
+        }
+    }
+
+    @Anonyme
+    public static class ModelWithNoSetter {
+        @RandomizeString(StringType.STRING)
+        public String value;
+        public String getValue() { return value; }
+        public ModelWithNoSetter(){
+            value = "hello";
+        }
+    }
+}

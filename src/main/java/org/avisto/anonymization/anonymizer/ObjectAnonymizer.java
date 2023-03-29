@@ -48,16 +48,18 @@ public class ObjectAnonymizer implements Randomizer {
         try {
             checkIfAnonymizable(object);
             randomize(object);
-        } catch (Exception e) {
-            throw new AnonymeException(e);
+        }
+        catch (IllegalArgumentException e) {
+            throw new BadUseAnnotationException(e);
         }
     }
 
     public <T> void anonymize(Iterable<T> objectCollection) {
         try {
             objectCollection.forEach(this::anonymize);
-        } catch (Exception e) {
-            throw new AnonymeException(e);
+        }
+        catch (IllegalArgumentException e) {
+            throw new BadUseAnnotationException(e);
         }
     }
 
@@ -81,13 +83,13 @@ public class ObjectAnonymizer implements Randomizer {
         try {
             clazz.getMethod(setterName, field.getType()).invoke(object, newValue);
         }
-        catch (NumberFormatException | NoSuchMethodException e) {
+        catch (NumberFormatException e) {
             throw new BadUseAnnotationException(object.getClass(), field, annotation, e);
         }
         catch (IllegalAccessException e) {
             throw new BadUseAnnotationException("restrict access of " + field.getName() + " doesn't allow modification");
         }
-        catch (InvocationTargetException e) {
+        catch (InvocationTargetException | NoSuchMethodException e) {
 
             throw new MethodGenerationException(String.format("failed to call setter method of the field : '%s'%nplease be sure that there is a setter available for this field and is named set<Fieldname> with a unique parameter that the type is the same as the field",
                     field), e);
@@ -118,7 +120,7 @@ public class ObjectAnonymizer implements Randomizer {
     }
 
     private <T> void numberBehavior(T object, Field field, RandomizeNumber annotation) {
-        genNewValue(object,
+        setNewValue(object,
                 field,
                 () -> annotation.value().getRandomValue(
                         annotation.minValue(),
@@ -128,7 +130,7 @@ public class ObjectAnonymizer implements Randomizer {
     }
     private <T> void stringBehavior(T object, Field field, RandomizeString annotation) {
         if (annotation.value().equals(StringType.REGEX)) rgxGen = new RgxGen(annotation.pattern());
-        genNewValue(object,
+        setNewValue(object,
                 field,
                 () -> annotation.value().getRandomValue(
                         annotation.minLength(),
@@ -140,7 +142,7 @@ public class ObjectAnonymizer implements Randomizer {
                 annotation);
     }
 
-    private <T> void genNewValue(T object ,Field field, Supplier<T> supplier, int size, Annotation annotation) {
+    private <T> void setNewValue(T object , Field field, Supplier<T> supplier, int size, Annotation annotation) {
         if (callGetterMethod(object, field) != null) {
             if (!(Iterable.class.isAssignableFrom(field.getType()))) {
                 callSetterMethod(annotation, object, field, supplier.get());

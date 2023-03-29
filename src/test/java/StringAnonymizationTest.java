@@ -180,6 +180,6 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertTrue(Pattern.matches("[01][0-9]{2}(1[012]|0[1-9])[0-9]{8}", model.value));
+        Assert.assertTrue(Pattern.matches("[12][0-9]{2}(1[012]|0[1-9])[0-9]{8}", model.value));
     }
 }
