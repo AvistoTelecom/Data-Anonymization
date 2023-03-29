@@ -12,7 +12,6 @@ import org.avisto.anonymization.exception.MethodGenerationException;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.model.enums.StringType;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -38,6 +37,7 @@ public class ObjectAnonymizer implements Randomizer {
     }
 
     public <T> void anonymize(Iterable<T> objectCollection) {
+        if (Objects.isNull(objectCollection)) { throw new BadUseAnnotationException("The object to anonymize is null"); }
         try {
             objectCollection.forEach(this::anonymize);
         }
@@ -60,14 +60,11 @@ public class ObjectAnonymizer implements Randomizer {
         }
     }
 
-    private <T> void callSetterMethod(Annotation annotation, T object, Field field, Object newValue) {
+    private <T> void callSetterMethod(T object, Field field, Object newValue) {
         Class<?> clazz = object.getClass();
         String setterName = genSetterName(field);
         try {
             clazz.getMethod(setterName, field.getType()).invoke(object, newValue);
-        }
-        catch (NumberFormatException e) {
-            throw new BadUseAnnotationException(object.getClass(), field, annotation, e);
         }
         catch (IllegalAccessException e) {
             throw new BadUseAnnotationException("restrict access of " + field.getName() + " doesn't allow modification");
@@ -108,8 +105,7 @@ public class ObjectAnonymizer implements Randomizer {
                 () -> annotation.value().getRandomValue(
                         annotation.minValue(),
                         annotation.maxValue()),
-                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
-                annotation);
+                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
     }
     private <T> void stringBehavior(T object, Field field, RandomizeString annotation) {
         if (annotation.value().equals(StringType.REGEX)) rgxGen = new RgxGen(annotation.pattern());
@@ -121,14 +117,13 @@ public class ObjectAnonymizer implements Randomizer {
                         annotation.path(),
                         annotation.possibleValues(),
                         rgxGen),
-                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
-                annotation);
+                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
     }
 
-    private <T> void setNewValue(T object , Field field, Supplier<T> supplier, int size, Annotation annotation) {
+    private <T> void setNewValue(T object , Field field, Supplier<T> supplier, int size) {
         if (callGetterMethod(object, field) != null) {
             if (!(Iterable.class.isAssignableFrom(field.getType()))) {
-                callSetterMethod(annotation, object, field, supplier.get());
+                callSetterMethod(object, field, supplier.get());
             } else if (Collection.class.isAssignableFrom(field.getType())) {
                 Collection<T> res = callGetterMethod(object, field);
                 for (int i = 0; i < size; i++) {
@@ -141,10 +136,8 @@ public class ObjectAnonymizer implements Randomizer {
     private void callMethod(Object object, Method method) {
         try {
             method.invoke(object);
-        } catch (InvocationTargetException e) {
+        } catch (InvocationTargetException | IllegalAccessException e) {
             throw new BadUseAnnotationException(String.format("Method %s on class %s couldn't be called", method.getName(), object.getClass()));
-        } catch (IllegalAccessException e) {
-            throw new BadUseAnnotationException(String.format("Method %s on class %s can't be accessed, verify its accessibility is public", method.getName(), object.getClass()));
         }
     }
 

@@ -1,5 +1,6 @@
 import model.NumberTestModel;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
+import org.avisto.anonymization.generator.NumberGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,8 +35,6 @@ public class NumberAnonymizationTest {
         Assert.assertNull(numberTest.longs);
         Assert.assertNull(numberTest.floats);
         Assert.assertNull(numberTest.doubles);
-
-
     }
 
     @Test
@@ -77,5 +76,30 @@ public class NumberAnonymizationTest {
         numberTest.ints.forEach(v -> Assert.assertTrue(v >= Integer.parseInt(NumberTestModel.STRING_MIN_VALUE) && v < Integer.parseInt(NumberTestModel.STRING_MAX_VALUE)));
         numberTest.doubles.forEach(v -> Assert.assertTrue(v >= Double.parseDouble(NumberTestModel.STRING_MIN_VALUE) && v < Double.parseDouble(NumberTestModel.STRING_MAX_VALUE)));
         numberTest.longs.forEach(v -> Assert.assertTrue(v >= Long.parseLong(NumberTestModel.STRING_MIN_VALUE) && v < Long.parseLong(NumberTestModel.STRING_MAX_VALUE)));
+    }
+
+    @Test
+    public void testGenerateNumber() {
+
+        Assert.assertNotNull(NumberGenerator.generateInt());
+        Assert.assertNotNull(NumberGenerator.generateLong());
+        Assert.assertNotNull(NumberGenerator.generateFloat());
+        Assert.assertNotNull(NumberGenerator.generateDouble());
+    }
+
+    @Test
+    public void testGenerateNumberMinGreaterThanMax() {
+        IllegalArgumentException intException = Assert.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateInt(5, 3));
+        String minGreaterThanMaxErrorMessage = "max must be greater than min";
+        Assert.assertEquals(minGreaterThanMaxErrorMessage, intException.getMessage());
+
+        IllegalArgumentException longException = Assert.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateLong(5L, 3L));
+        Assert.assertEquals(minGreaterThanMaxErrorMessage, longException.getMessage());
+
+        IllegalArgumentException floatException = Assert.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateFloat(5f, 3f));
+        Assert.assertEquals(minGreaterThanMaxErrorMessage, floatException.getMessage());
+
+        IllegalArgumentException doubleException = Assert.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateDouble(5d, 3d));
+        Assert.assertEquals(minGreaterThanMaxErrorMessage, doubleException.getMessage());
     }
 }

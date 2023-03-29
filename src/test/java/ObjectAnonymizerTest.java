@@ -7,6 +7,10 @@ import org.avisto.anonymization.exception.MethodGenerationException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class ObjectAnonymizerTest {
     public ObjectAnonymizer anonymizer = new ObjectAnonymizer();
 
@@ -43,8 +47,33 @@ public class ObjectAnonymizerTest {
 
     @Test
     public void testNullObject() {
-        StringTestModel model = null;
-        AnonymeException e = Assert.assertThrows(AnonymeException.class, () -> anonymizer.anonymize(model));
+        AnonymeException e = Assert.assertThrows(AnonymeException.class, () -> anonymizer.anonymize((StringTestModel) null));
         Assert.assertEquals("The object to anonymize is null", e.getMessage());
+    }
+
+    @Test
+    public void testIterableObject() {
+        Collection<StringTestModel> models = Stream.generate(StringTestModel::new)
+                .limit(10)
+                .collect(Collectors.toList());
+        anonymizer.anonymize(models);
+        Assert.assertEquals(10, models.size());
+        BadUseAnnotationException e = Assert.assertThrows(BadUseAnnotationException.class, () -> anonymizer.anonymize(null));
+        Assert.assertEquals("The object to anonymize is null", e.getMessage());
+
+    }
+
+    @Test
+    public void testInaccessibleMethod() {
+        Model.ModelWithInaccessibleMethod model = new Model.ModelWithInaccessibleMethod();
+        BadUseAnnotationException e = Assert.assertThrows(BadUseAnnotationException.class, () -> anonymizer.anonymize(model));
+        Assert.assertEquals("org.avisto.anonymization.exception.BadUseAnnotationException: Method doThing on class class model.Model$ModelWithInaccessibleMethod couldn't be called", e.getMessage());
+    }
+
+    @Test
+    public void testParamMethod() {
+        Model.ModelWithInaccessibleMethod model = new Model.ModelWithInaccessibleMethod();
+        BadUseAnnotationException e = Assert.assertThrows(BadUseAnnotationException.class, () -> anonymizer.anonymize(model));
+        Assert.assertEquals("org.avisto.anonymization.exception.BadUseAnnotationException: Method doThing on class class model.Model$ModelWithInaccessibleMethod couldn't be called", e.getMessage());
     }
 }

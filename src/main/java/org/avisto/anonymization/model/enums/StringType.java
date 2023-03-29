@@ -104,8 +104,8 @@ public enum StringType implements GenerableString{
         @Override
         @SuppressWarnings("unchecked")
         public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
-            if (path == null || path.isEmpty()) {
-                throw new IllegalArgumentException("On STRING_FROM_FILE type, path must not be empty or null");
+            if (path == null || path.isBlank()) {
+                throw new IllegalArgumentException("On STRING_FROM_FILE type, path must not be blank or null");
             }
             return StringGenerator.generateStringFromFile(path);
         }
