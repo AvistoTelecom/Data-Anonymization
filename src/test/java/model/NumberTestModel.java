@@ -4,20 +4,12 @@
 
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.avisto.anonymization.annotation.Anonyme;
 import org.avisto.anonymization.annotation.RandomizeNumber;
 import org.avisto.anonymization.model.enums.NumberType;
 
 import java.util.Collection;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Anonyme
 public class NumberTestModel {
 
@@ -46,4 +38,7 @@ public class NumberTestModel {
     @RandomizeNumber(value = NumberType.DOUBLE, minValue = STRING_MIN_VALUE, maxValue = STRING_MAX_VALUE, minSize = MIN_SIZE, maxSize = MAX_SIZE)
     public Collection<Double> doubles;
 
+
+    public NumberTestModel() {
+    }
 }

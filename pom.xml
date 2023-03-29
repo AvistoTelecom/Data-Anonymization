@@ -112,13 +112,6 @@
 
 
     <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.26</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.github.curious-odd-man/rgxgen -->
         <dependency>
             <groupId>com.github.curious-odd-man</groupId>

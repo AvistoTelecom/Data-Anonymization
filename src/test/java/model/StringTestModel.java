@@ -4,18 +4,10 @@
 
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.avisto.anonymization.annotation.Anonyme;
 import org.avisto.anonymization.annotation.RandomizeString;
 import org.avisto.anonymization.model.enums.StringType;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Anonyme
 public class StringTestModel {
 
@@ -28,4 +20,7 @@ public class StringTestModel {
 
     @RandomizeString(StringType.STRING)
     public String value;
+
+    public StringTestModel() {
+    }
 }
