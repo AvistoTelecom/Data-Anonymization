@@ -17,6 +17,18 @@ public class StringTestModel {
     @RandomizeString(StringType.STRING)
     public String value;
 
+    public StringTestModel(String value) {
+        this.value = value;
+    }
+
     public StringTestModel() {
+    }
+
+    public String getValue() {
+        return this.value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

@@ -37,4 +37,68 @@ public class NumberTestModel {
 
     public NumberTestModel() {
     }
+
+    public Integer getIntValue() {
+        return this.intValue;
+    }
+
+    public Long getLongValue() {
+        return this.longValue;
+    }
+
+    public Float getFloatValue() {
+        return this.floatValue;
+    }
+
+    public Double getDoubleValue() {
+        return this.doubleValue;
+    }
+
+    public Collection<Integer> getInts() {
+        return this.ints;
+    }
+
+    public Collection<Long> getLongs() {
+        return this.longs;
+    }
+
+    public Collection<Float> getFloats() {
+        return this.floats;
+    }
+
+    public Collection<Double> getDoubles() {
+        return this.doubles;
+    }
+
+    public void setIntValue(Integer intValue) {
+        this.intValue = intValue;
+    }
+
+    public void setLongValue(Long longValue) {
+        this.longValue = longValue;
+    }
+
+    public void setFloatValue(Float floatValue) {
+        this.floatValue = floatValue;
+    }
+
+    public void setDoubleValue(Double doubleValue) {
+        this.doubleValue = doubleValue;
+    }
+
+    public void setInts(Collection<Integer> ints) {
+        this.ints = ints;
+    }
+
+    public void setLongs(Collection<Long> longs) {
+        this.longs = longs;
+    }
+
+    public void setFloats(Collection<Float> floats) {
+        this.floats = floats;
+    }
+
+    public void setDoubles(Collection<Double> doubles) {
+        this.doubles = doubles;
+    }
 }
