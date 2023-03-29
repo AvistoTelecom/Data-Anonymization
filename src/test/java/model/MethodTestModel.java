@@ -1,7 +1,3 @@
-/*
- *
- */
-
 package model;
 
 import org.avisto.anonymization.annotation.Anonyme;
