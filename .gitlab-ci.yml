@@ -13,6 +13,6 @@ sast:
     reports:
       coverage_report:
         coverage_format: cobertura
-        path: coverage/cobertura-coverage.xml
+        path: coverage/build.xml
 include:
 - template: Security/SAST.gitlab-ci.yml
