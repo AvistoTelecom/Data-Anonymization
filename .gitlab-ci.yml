@@ -9,5 +9,10 @@ stages:
 - test
 sast:
   stage: test
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
 include:
 - template: Security/SAST.gitlab-ci.yml
