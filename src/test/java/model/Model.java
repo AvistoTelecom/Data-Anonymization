@@ -3,7 +3,7 @@ package model;
 import org.avisto.anonymization.annotation.Anonyme;
 import org.avisto.anonymization.annotation.RandomizeNumber;
 import org.avisto.anonymization.annotation.RandomizeString;
-import org.avisto.anonymization.annotation.SelfImplementaion;
+import org.avisto.anonymization.annotation.SelfImplementation;
 import org.avisto.anonymization.model.enums.NumberType;
 import org.avisto.anonymization.model.enums.StringType;
 
@@ -75,7 +75,7 @@ public class Model {
             value =  "";
         }
 
-        @SelfImplementaion
+        @SelfImplementation
         private void doThing() {
             value = "do thing";
         }
@@ -98,7 +98,7 @@ public class Model {
             value = "";
         }
 
-        @SelfImplementaion
+        @SelfImplementation
         private void doThing(String thing) {
             value = thing;
         }

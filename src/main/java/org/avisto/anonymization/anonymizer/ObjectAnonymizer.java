@@ -5,7 +5,7 @@ import com.github.curiousoddman.rgxgen.RgxGen;
 import org.avisto.anonymization.annotation.Anonyme;
 import org.avisto.anonymization.annotation.RandomizeNumber;
 import org.avisto.anonymization.annotation.RandomizeString;
-import org.avisto.anonymization.annotation.SelfImplementaion;
+import org.avisto.anonymization.annotation.SelfImplementation;
 import org.avisto.anonymization.exception.AnonymeException;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.MethodGenerationException;
@@ -155,7 +155,7 @@ public class ObjectAnonymizer implements Randomizer {
             }
         }
         for (Method method : clazz.getDeclaredMethods()) {
-            if (method.isAnnotationPresent(SelfImplementaion.class)) {
+            if (method.isAnnotationPresent(SelfImplementation.class)) {
                 callMethod(object, method);
             }
         }
