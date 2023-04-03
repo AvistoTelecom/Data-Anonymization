@@ -217,6 +217,25 @@ See more about nameFileBehavior on [RandomizeString](#stringAnnotation)
 
 </details>
 
+<details>
+    <summary>
+        Handle format
+    </summary>
+
+|    format     | extension                            |
+|:-------------:|--------------------------------------|
+|     image     | `bmp` `gif` `png` `jpg` `tiff` `svg` |
+|     text      | `odt` `docx` `txt`                   |
+| presentation  | `ods` `pptx`                         |
+|  spreadsheet  | `odp` `xlsx` `csv`                   |
+|     other     | `pdf`                                |
+
+
+The size of the collection is selected randomly between minSize and maxSize.
+
+See more about nameFileBehavior on [RandomizeString](#stringAnnotation)
+
+</details>
 
 ### SelfImplementation
 
