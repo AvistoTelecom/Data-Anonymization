@@ -61,7 +61,10 @@ public class Main {
     }
 }
 ````
-### Enum NumberType
+
+## Enum
+
+### NumberType
 **Enum that represent all handling number type generator.**
 <details>
     <summary>
@@ -75,7 +78,7 @@ value:
 - `DOUBLE`
 </details>
 
-### Enum StringType
+### StringType
 **Enum that represent all handling StringFormat generator.**
 
 <details>
@@ -98,8 +101,9 @@ value:
 - `REGEX`
 </details>
 
+## Annotation
 
-### Annotation RandomizeNumber
+### RandomizeNumber
 
 <details>
     <summary>
@@ -136,7 +140,7 @@ minSize and maxSize are used only if the Filed is a collection.
 
 </details>
 
-### Annotation RandomizeString
+### RandomizeString <a id='stringAnnotation'/>
 
 <details>
     <summary>
@@ -191,11 +195,49 @@ replace %s by a random string.
 
 </details>
 
-### Annotation SelfImplementation
+
+### RandomizeFile
+
+<details>
+    <summary>
+        Parameters
+    </summary>
+
+|             name | type             | is optional | default                                                                     | description                                   |
+|-----------------:|------------------|-------------|-----------------------------------------------------------------------------|-----------------------------------------------|
+|  pathToDirectory | String           | false       | none                                                                        | directory where to save new file              |
+| nameFileBehavior | @RandomizeString | true        | @RandomizeString(value = StringType.STRING, minLength = 15, maxLength = 30) | behavior how to generate the name of new file |
+|        removeOld | boolean          | true        | true                                                                        | define if the old file should be removed      |
+|          minSize | int              | true        | 1                                                                           | min size of the collection                    |
+|          maxSize | int              | true        | 15                                                                          | max size of the collection                    |
+
+The size of the collection is selected randomly between minSize and maxSize.
+
+See more about nameFileBehavior on [RandomizeString](#stringAnnotation)
+
+</details>
+
+
+### SelfImplementation
 
 All method that are annotated with @SelfImplementation are called after randomizing attribute. Method must have no parameter and be public.
 
 This can be used if you want to make custom behavior on some field.
+
+
+## Generator
+
+All method used in the library except for regex use these classes to generate different values.
+
+|     class name     |
+|:------------------:|
+|  StringGenerator   |
+|  NumberGenerator   |
+|  BooleanGenerator  |
+|   FileGenerator    |
+
+See more about these classes and method available [here]() 
+
 
 ## Limitation
 
@@ -221,9 +263,13 @@ This library work with default getter and setter build with lombok
 
 If a field has null value it will stay null
 
+</details>
+
+
+
 ## Contributing
-/!\ à compléter
+/!\ TO COMPLETE
 
 ## License
-/!\ à compléter 
+/!\ TO COMPLETE 
 
