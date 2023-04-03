@@ -1,9 +1,6 @@
 package model;
 
-import org.avisto.anonymization.annotation.Anonyme;
-import org.avisto.anonymization.annotation.RandomizeNumber;
-import org.avisto.anonymization.annotation.RandomizeString;
-import org.avisto.anonymization.annotation.SelfImplementation;
+import org.avisto.anonymization.annotation.*;
 import org.avisto.anonymization.model.enums.NumberType;
 import org.avisto.anonymization.model.enums.StringType;
 
@@ -101,6 +98,42 @@ public class Model {
         @SelfImplementation
         private void doThing(String thing) {
             value = thing;
+        }
+    }
+
+    @Anonyme
+    public static class ModelWithOldFileRemove {
+        @RandomizeFile(pathToDirectory = "src/test/resources/file/new/", removeOld = false, nameFileBehavior = @RandomizeString(value = StringType.STRING_FROM_ARRAY, possibleValues = {"newFile"}))
+        public String value;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public ModelWithOldFileRemove() {
+            value = "src/test/resources/file/new/file.txt";
+        }
+    }
+
+    @Anonyme
+    public static class ModelWithFile {
+        @RandomizeFile(pathToDirectory = "src/test/resources/file/new/", nameFileBehavior = @RandomizeString(value = StringType.STRING_FROM_ARRAY, possibleValues = {"newFile"}))
+        public String value;
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        public ModelWithFile() {
+            value = "src/test/resources/file/new/file.txt";
         }
     }
 }
