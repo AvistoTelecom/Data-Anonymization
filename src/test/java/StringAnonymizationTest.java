@@ -3,8 +3,8 @@ import org.avisto.anonymization.annotation.RandomizeString;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
 import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.StringType;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.regex.Pattern;
 
@@ -22,7 +22,7 @@ public class StringAnonymizationTest {
             public String value;
         };
         anonymizer.anonymize(model);
-        Assert.assertNull(model.value);
+        Assertions.assertNull(model.value);
 
     }
 
@@ -34,7 +34,7 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertTrue(model.value.length() >= StringTestModel.MIN_LENGTH && model.value.length() <= StringTestModel.MAX_LENGTH);
+        Assertions.assertTrue(model.value.length() >= StringTestModel.MIN_LENGTH && model.value.length() <= StringTestModel.MAX_LENGTH);
 
     }
 
@@ -47,7 +47,7 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertEquals(model.value, lorem.substring(0, model.value.length()));
+        Assertions.assertEquals(model.value, lorem.substring(0, model.value.length()));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertTrue(Pattern.matches("([0-9a-f]{0,4}:){7}([0-9a-f]{0,4})", model.value));
+        Assertions.assertTrue(Pattern.matches("([0-9a-f]{0,4}:){7}([0-9a-f]{0,4})", model.value));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertTrue(Pattern.matches("((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)", model.value));
+        Assertions.assertTrue(Pattern.matches("((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)", model.value));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertTrue(Pattern.matches("[a-z]{4}", model.value));
+        Assertions.assertTrue(Pattern.matches("[a-z]{4}", model.value));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertTrue(Pattern.matches(".*@.*[.].*", model.value));
+        Assertions.assertTrue(Pattern.matches(".*@.*[.].*", model.value));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertEquals("first value", model.value);
+        Assertions.assertEquals("first value", model.value);
     }
 
     @Test
@@ -113,28 +113,28 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertEquals("first", model.value);
+        Assertions.assertEquals("first", model.value);
     }
 
     @Test
     public void testStringFomArrayValueEmpty() {
-        IllegalArgumentException e = Assert.assertThrows(IllegalArgumentException.class, () -> StringType.STRING_FROM_ARRAY.getRandomValue(0,0,null, new String[]{}, null));
-        Assert.assertEquals("On STRING_FROM_ARRAY type, possibleValues must not be empty or null", e.getMessage());
+        IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class, () -> StringType.STRING_FROM_ARRAY.getRandomValue(0,0,null, new String[]{}, null));
+        Assertions.assertEquals("On STRING_FROM_ARRAY type, possibleValues must not be empty or null", e.getMessage());
 
-        e = Assert.assertThrows(IllegalArgumentException.class, () -> StringType.STRING_FROM_ARRAY.getRandomValue(0,0,null, null, null));
-        Assert.assertEquals("On STRING_FROM_ARRAY type, possibleValues must not be empty or null", e.getMessage());
+        e = Assertions.assertThrows(IllegalArgumentException.class, () -> StringType.STRING_FROM_ARRAY.getRandomValue(0,0,null, null, null));
+        Assertions.assertEquals("On STRING_FROM_ARRAY type, possibleValues must not be empty or null", e.getMessage());
     }
 
     @Test
     public void testStringFomFileValueEmpty() {
-        IllegalArgumentException e = Assert.assertThrows(IllegalArgumentException.class, () -> StringType.STRING_FROM_FILE.getRandomValue(0,0,"  ", null, null));
-        Assert.assertEquals("On STRING_FROM_FILE type, path must not be blank or null", e.getMessage());
+        IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class, () -> StringType.STRING_FROM_FILE.getRandomValue(0,0,"  ", null, null));
+        Assertions.assertEquals("On STRING_FROM_FILE type, path must not be blank or null", e.getMessage());
 
-        e = Assert.assertThrows(IllegalArgumentException.class, () -> StringType.STRING_FROM_FILE.getRandomValue(0,0,null, null, null));
-        Assert.assertEquals("On STRING_FROM_FILE type, path must not be blank or null", e.getMessage());
+        e = Assertions.assertThrows(IllegalArgumentException.class, () -> StringType.STRING_FROM_FILE.getRandomValue(0,0,null, null, null));
+        Assertions.assertEquals("On STRING_FROM_FILE type, path must not be blank or null", e.getMessage());
 
-        e = Assert.assertThrows(IllegalArgumentException.class, () -> StringType.STRING_FROM_FILE.getRandomValue(0,0,"", null, null));
-        Assert.assertEquals("On STRING_FROM_FILE type, path must not be blank or null", e.getMessage());
+        e = Assertions.assertThrows(IllegalArgumentException.class, () -> StringType.STRING_FROM_FILE.getRandomValue(0,0,"", null, null));
+        Assertions.assertEquals("On STRING_FROM_FILE type, path must not be blank or null", e.getMessage());
     }
 
     @Test
@@ -146,7 +146,7 @@ public class StringAnonymizationTest {
         init(model);
         anonymizer.anonymize(model);
         String pattern = String.format("[0-9]{%s,%s}", StringTestModel.MIN_LENGTH, StringTestModel.MAX_LENGTH);
-        Assert.assertTrue(Pattern.matches(pattern, model.value));
+        Assertions.assertTrue(Pattern.matches(pattern, model.value));
     }
 
     @Test
@@ -157,7 +157,7 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertTrue(Pattern.matches("(http|https)://.*", model.value));
+        Assertions.assertTrue(Pattern.matches("(http|https)://.*", model.value));
     }
 
     @Test
@@ -168,7 +168,7 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertTrue(Pattern.matches("[0-9]{13}", model.value));
+        Assertions.assertTrue(Pattern.matches("[0-9]{13}", model.value));
     }
 
     @Test
@@ -179,7 +179,7 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertTrue(Pattern.matches("(06|07)[0-9]{8}", model.value));
+        Assertions.assertTrue(Pattern.matches("(06|07)[0-9]{8}", model.value));
     }
 
     @Test
@@ -190,7 +190,7 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertTrue(Pattern.matches("[A-Z]{2}-[0-9]{3}-[A-Z]{2}", model.value));
+        Assertions.assertTrue(Pattern.matches("[A-Z]{2}-[0-9]{3}-[A-Z]{2}", model.value));
     }
 
     @Test
@@ -201,17 +201,17 @@ public class StringAnonymizationTest {
         };
         init(model);
         anonymizer.anonymize(model);
-        Assert.assertTrue(Pattern.matches("[12][0-9]{2}(1[012]|0[1-9])[0-9]{8}", model.value));
+        Assertions.assertTrue(Pattern.matches("[12][0-9]{2}(1[012]|0[1-9])[0-9]{8}", model.value));
     }
     @Test
     public void testNotEnoughNumberDigit() {
-        IllegalArgumentException e = Assert.assertThrows(IllegalArgumentException.class, () -> StringGenerator.generateNumber(20, 25, 1));
-        Assert.assertEquals("not enough number of digits to represent max value", e.getMessage());
+        IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class, () -> StringGenerator.generateNumber(20, 25, 1));
+        Assertions.assertEquals("not enough number of digits to represent max value", e.getMessage());
     }
 
     @Test
     public void testValueFromFile_FileNotFound() {
-        IllegalArgumentException e = Assert.assertThrows(IllegalArgumentException.class, () -> StringGenerator.generateStringFromFile("PATH/TO/FILE.txt"));
-        Assert.assertEquals("file PATH/TO/FILE.txt not found", e.getMessage());
+        IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class, () -> StringGenerator.generateStringFromFile("PATH/TO/FILE.txt"));
+        Assertions.assertEquals("file PATH/TO/FILE.txt not found", e.getMessage());
     }
 }

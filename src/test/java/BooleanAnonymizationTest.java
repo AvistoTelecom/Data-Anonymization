@@ -3,8 +3,8 @@
  */
 
 import org.avisto.anonymization.generator.BooleanGenerator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;
 
@@ -16,7 +16,7 @@ public class BooleanAnonymizationTest {
 
         long size = 100000;
         float effectiveProbability = (float) Stream.generate(BooleanGenerator::generateBoolean).limit(size).filter(value -> value).count() / size;
-        Assert.assertTrue(minProbabilityWithEpsilon <= effectiveProbability && maxProbabilityWithEpsilon >= effectiveProbability);
+        Assertions.assertTrue(minProbabilityWithEpsilon <= effectiveProbability && maxProbabilityWithEpsilon >= effectiveProbability);
     }
 
     @Test
@@ -27,6 +27,6 @@ public class BooleanAnonymizationTest {
 
         long size = 100000;
         float effectiveProbability = (float) Stream.generate(() -> BooleanGenerator.generateBoolean(probability)).limit(size).filter(value -> value).count() / size;
-        Assert.assertTrue(minProbabilityWithEpsilon <= effectiveProbability && maxProbabilityWithEpsilon >= effectiveProbability);
+        Assertions.assertTrue(minProbabilityWithEpsilon <= effectiveProbability && maxProbabilityWithEpsilon >= effectiveProbability);
     }
 }

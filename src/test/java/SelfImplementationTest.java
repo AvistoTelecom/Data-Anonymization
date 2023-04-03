@@ -1,7 +1,7 @@
 import model.MethodTestModel;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class SelfImplementationTest {
 
@@ -11,6 +11,6 @@ public class SelfImplementationTest {
     public void testCallMethod() {
         MethodTestModel model = new MethodTestModel();
         anonymizer.anonymize(model);
-        Assert.assertEquals("hello world", model.value);
+        Assertions.assertEquals("hello world", model.value);
     }
 }

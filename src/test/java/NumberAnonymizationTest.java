@@ -1,8 +1,8 @@
 import model.NumberTestModel;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
 import org.avisto.anonymization.generator.NumberGenerator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
@@ -26,15 +26,15 @@ public class NumberAnonymizationTest {
         NumberTestModel numberTest = new NumberTestModel();
 
         anonymizer.anonymize(numberTest);
-        Assert.assertNull(numberTest.doubleValue);
-        Assert.assertNull(numberTest.intValue);
-        Assert.assertNull(numberTest.floatValue);
-        Assert.assertNull(numberTest.longValue);
+        Assertions.assertNull(numberTest.doubleValue);
+        Assertions.assertNull(numberTest.intValue);
+        Assertions.assertNull(numberTest.floatValue);
+        Assertions.assertNull(numberTest.longValue);
 
-        Assert.assertNull(numberTest.ints);
-        Assert.assertNull(numberTest.longs);
-        Assert.assertNull(numberTest.floats);
-        Assert.assertNull(numberTest.doubles);
+        Assertions.assertNull(numberTest.ints);
+        Assertions.assertNull(numberTest.longs);
+        Assertions.assertNull(numberTest.floats);
+        Assertions.assertNull(numberTest.doubles);
     }
 
     @Test
@@ -43,20 +43,20 @@ public class NumberAnonymizationTest {
         init(numberTest);
         anonymizer.anonymize(numberTest);
 
-        Assert.assertNotNull(numberTest.longValue);
-        Assert.assertNotNull(numberTest.intValue);
-        Assert.assertNotNull(numberTest.doubleValue);
-        Assert.assertNotNull(numberTest.floatValue);
+        Assertions.assertNotNull(numberTest.longValue);
+        Assertions.assertNotNull(numberTest.intValue);
+        Assertions.assertNotNull(numberTest.doubleValue);
+        Assertions.assertNotNull(numberTest.floatValue);
 
-        Assert.assertNotNull(numberTest.longs);
-        Assert.assertNotNull(numberTest.ints);
-        Assert.assertNotNull(numberTest.doubles);
-        Assert.assertNotNull(numberTest.floats);
+        Assertions.assertNotNull(numberTest.longs);
+        Assertions.assertNotNull(numberTest.ints);
+        Assertions.assertNotNull(numberTest.doubles);
+        Assertions.assertNotNull(numberTest.floats);
 
-        Assert.assertTrue(numberTest.ints.size() >= NumberTestModel.MIN_SIZE && numberTest.ints.size() <= NumberTestModel.MAX_SIZE);
-        Assert.assertTrue(numberTest.floats.size() >= NumberTestModel.MIN_SIZE && numberTest.floats.size() <= NumberTestModel.MAX_SIZE);
-        Assert.assertTrue(numberTest.doubles.size() >= NumberTestModel.MIN_SIZE && numberTest.doubles.size() <= NumberTestModel.MAX_SIZE);
-        Assert.assertTrue(numberTest.longs.size() >= NumberTestModel.MIN_SIZE && numberTest.longs.size() <= NumberTestModel.MAX_SIZE);
+        Assertions.assertTrue(numberTest.ints.size() >= NumberTestModel.MIN_SIZE && numberTest.ints.size() <= NumberTestModel.MAX_SIZE);
+        Assertions.assertTrue(numberTest.floats.size() >= NumberTestModel.MIN_SIZE && numberTest.floats.size() <= NumberTestModel.MAX_SIZE);
+        Assertions.assertTrue(numberTest.doubles.size() >= NumberTestModel.MIN_SIZE && numberTest.doubles.size() <= NumberTestModel.MAX_SIZE);
+        Assertions.assertTrue(numberTest.longs.size() >= NumberTestModel.MIN_SIZE && numberTest.longs.size() <= NumberTestModel.MAX_SIZE);
 
     }
 
@@ -67,39 +67,39 @@ public class NumberAnonymizationTest {
         anonymizer.anonymize(numberTest);
         init(numberTest);
 
-        Assert.assertTrue(numberTest.floatValue >= Float.parseFloat(NumberTestModel.STRING_MIN_VALUE) && numberTest.floatValue < Float.parseFloat(NumberTestModel.STRING_MAX_VALUE));
-        Assert.assertTrue(numberTest.intValue >= Integer.parseInt(NumberTestModel.STRING_MIN_VALUE) && numberTest.intValue < Integer.parseInt(NumberTestModel.STRING_MAX_VALUE));
-        Assert.assertTrue(numberTest.longValue >= Long.parseLong(NumberTestModel.STRING_MIN_VALUE) && numberTest.longValue < Long.parseLong(NumberTestModel.STRING_MAX_VALUE));
-        Assert.assertTrue(numberTest.doubleValue >= Double.parseDouble(NumberTestModel.STRING_MIN_VALUE) && numberTest.doubleValue < Double.parseDouble(NumberTestModel.STRING_MAX_VALUE));
+        Assertions.assertTrue(numberTest.floatValue >= Float.parseFloat(NumberTestModel.STRING_MIN_VALUE) && numberTest.floatValue < Float.parseFloat(NumberTestModel.STRING_MAX_VALUE));
+        Assertions.assertTrue(numberTest.intValue >= Integer.parseInt(NumberTestModel.STRING_MIN_VALUE) && numberTest.intValue < Integer.parseInt(NumberTestModel.STRING_MAX_VALUE));
+        Assertions.assertTrue(numberTest.longValue >= Long.parseLong(NumberTestModel.STRING_MIN_VALUE) && numberTest.longValue < Long.parseLong(NumberTestModel.STRING_MAX_VALUE));
+        Assertions.assertTrue(numberTest.doubleValue >= Double.parseDouble(NumberTestModel.STRING_MIN_VALUE) && numberTest.doubleValue < Double.parseDouble(NumberTestModel.STRING_MAX_VALUE));
 
-        numberTest.floats.forEach(v -> Assert.assertTrue(v >= Float.parseFloat(NumberTestModel.STRING_MIN_VALUE) && v < Float.parseFloat(NumberTestModel.STRING_MAX_VALUE)));
-        numberTest.ints.forEach(v -> Assert.assertTrue(v >= Integer.parseInt(NumberTestModel.STRING_MIN_VALUE) && v < Integer.parseInt(NumberTestModel.STRING_MAX_VALUE)));
-        numberTest.doubles.forEach(v -> Assert.assertTrue(v >= Double.parseDouble(NumberTestModel.STRING_MIN_VALUE) && v < Double.parseDouble(NumberTestModel.STRING_MAX_VALUE)));
-        numberTest.longs.forEach(v -> Assert.assertTrue(v >= Long.parseLong(NumberTestModel.STRING_MIN_VALUE) && v < Long.parseLong(NumberTestModel.STRING_MAX_VALUE)));
+        numberTest.floats.forEach(v -> Assertions.assertTrue(v >= Float.parseFloat(NumberTestModel.STRING_MIN_VALUE) && v < Float.parseFloat(NumberTestModel.STRING_MAX_VALUE)));
+        numberTest.ints.forEach(v -> Assertions.assertTrue(v >= Integer.parseInt(NumberTestModel.STRING_MIN_VALUE) && v < Integer.parseInt(NumberTestModel.STRING_MAX_VALUE)));
+        numberTest.doubles.forEach(v -> Assertions.assertTrue(v >= Double.parseDouble(NumberTestModel.STRING_MIN_VALUE) && v < Double.parseDouble(NumberTestModel.STRING_MAX_VALUE)));
+        numberTest.longs.forEach(v -> Assertions.assertTrue(v >= Long.parseLong(NumberTestModel.STRING_MIN_VALUE) && v < Long.parseLong(NumberTestModel.STRING_MAX_VALUE)));
     }
 
     @Test
     public void testGenerateNumber() {
 
-        Assert.assertNotNull(NumberGenerator.generateInt());
-        Assert.assertNotNull(NumberGenerator.generateLong());
-        Assert.assertNotNull(NumberGenerator.generateFloat());
-        Assert.assertNotNull(NumberGenerator.generateDouble());
+        Assertions.assertNotNull(NumberGenerator.generateInt());
+        Assertions.assertNotNull(NumberGenerator.generateLong());
+        Assertions.assertNotNull(NumberGenerator.generateFloat());
+        Assertions.assertNotNull(NumberGenerator.generateDouble());
     }
 
     @Test
     public void testGenerateNumberMinGreaterThanMax() {
-        IllegalArgumentException intException = Assert.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateInt(5, 3));
+        IllegalArgumentException intException = Assertions.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateInt(5, 3));
         String minGreaterThanMaxErrorMessage = "max must be greater than min";
-        Assert.assertEquals(minGreaterThanMaxErrorMessage, intException.getMessage());
+        Assertions.assertEquals(minGreaterThanMaxErrorMessage, intException.getMessage());
 
-        IllegalArgumentException longException = Assert.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateLong(5L, 3L));
-        Assert.assertEquals(minGreaterThanMaxErrorMessage, longException.getMessage());
+        IllegalArgumentException longException = Assertions.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateLong(5L, 3L));
+        Assertions.assertEquals(minGreaterThanMaxErrorMessage, longException.getMessage());
 
-        IllegalArgumentException floatException = Assert.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateFloat(5f, 3f));
-        Assert.assertEquals(minGreaterThanMaxErrorMessage, floatException.getMessage());
+        IllegalArgumentException floatException = Assertions.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateFloat(5f, 3f));
+        Assertions.assertEquals(minGreaterThanMaxErrorMessage, floatException.getMessage());
 
-        IllegalArgumentException doubleException = Assert.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateDouble(5d, 3d));
-        Assert.assertEquals(minGreaterThanMaxErrorMessage, doubleException.getMessage());
+        IllegalArgumentException doubleException = Assertions.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateDouble(5d, 3d));
+        Assertions.assertEquals(minGreaterThanMaxErrorMessage, doubleException.getMessage());
     }
 }
