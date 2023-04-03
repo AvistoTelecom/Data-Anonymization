@@ -222,13 +222,15 @@ See more about nameFileBehavior on [RandomizeString](#stringAnnotation)
         Handle format
     </summary>
 
-|    format     | extension                            |
-|:-------------:|--------------------------------------|
-|     image     | `bmp` `gif` `png` `jpg` `tiff` `svg` |
-|     text      | `odt` `docx` `txt`                   |
-| presentation  | `ods` `pptx`                         |
-|  spreadsheet  | `odp` `xlsx` `csv`                   |
-|     other     | `pdf`                                |
+|    format    | extension                            |
+|:------------:|--------------------------------------|
+|    image     | `bmp` `gif` `png` `jpg` `tiff` `svg` |
+|     text     | `odt` `docx` `txt`                   |
+| presentation | `ods` `pptx`                         |
+| spreadsheet  | `odp` `xlsx` `csv`                   |
+|    video     | `mp4`                                |
+|    audio     | `mp3` `m4a` `flac` `ogg` `wav`       |
+|    other     | `pdf`                                |
 
 
 The size of the collection is selected randomly between minSize and maxSize.
