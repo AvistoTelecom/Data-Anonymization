@@ -2,13 +2,11 @@ package org.avisto.anonymization.anonymizer;
 
 
 import com.github.curiousoddman.rgxgen.RgxGen;
-import org.avisto.anonymization.annotation.Anonyme;
-import org.avisto.anonymization.annotation.RandomizeNumber;
-import org.avisto.anonymization.annotation.RandomizeString;
-import org.avisto.anonymization.annotation.SelfImplementation;
+import org.avisto.anonymization.annotation.*;
 import org.avisto.anonymization.exception.AnonymeException;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.MethodGenerationException;
+import org.avisto.anonymization.generator.FileGenerator;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.model.enums.StringType;
 
@@ -99,25 +97,28 @@ public class ObjectAnonymizer implements Randomizer {
         return  "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
     }
 
-    private <T> void numberBehavior(T object, Field field, RandomizeNumber annotation) {
-        setNewValue(object,
-                field,
-                () -> annotation.value().getRandomValue(
+    private <T> T numberBehavior(RandomizeNumber annotation) {
+        return annotation.value().getRandomValue(
                         annotation.minValue(),
-                        annotation.maxValue()),
-                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
+                        annotation.maxValue());
     }
-    private <T> void stringBehavior(T object, Field field, RandomizeString annotation) {
+    private <T> T stringBehavior(RandomizeString annotation) {
         if (annotation.value().equals(StringType.REGEX)) rgxGen = new RgxGen(annotation.pattern());
-        setNewValue(object,
-                field,
-                () -> annotation.value().getRandomValue(
+        return annotation.value().getRandomValue(
                         annotation.minLength(),
                         annotation.maxLength(),
                         annotation.path(),
                         annotation.possibleValues(),
-                        rgxGen),
-                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
+                        rgxGen);
+    }
+
+    private <T> String fileBehavior(RandomizeFile annotation, T object, Field field) {
+        String originalFile = callGetterMethod(object, field);
+        if (annotation.removeOld()) FileGenerator.deleteFile(originalFile);
+        return FileGenerator.generateFile(
+                annotation.pathToDirectory(),
+                stringBehavior(annotation.nameFileBehavior()),
+                FileGenerator.getExtension(originalFile));
     }
 
     private <T> void setNewValue(T object , Field field, Supplier<T> supplier, int size) {
@@ -147,11 +148,24 @@ public class ObjectAnonymizer implements Randomizer {
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(RandomizeNumber.class)) {
                 RandomizeNumber annotation = field.getAnnotation(RandomizeNumber.class);
-                numberBehavior(object, field, annotation);
+                setNewValue(object,
+                        field,
+                        () -> numberBehavior(annotation),
+                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
             }
              else if (field.isAnnotationPresent(RandomizeString.class)) {
                 RandomizeString annotation = field.getAnnotation(RandomizeString.class);
-                stringBehavior(object, field, annotation);
+                setNewValue(object,
+                        field,
+                        () -> stringBehavior(annotation),
+                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
+            } else if (field.isAnnotationPresent(RandomizeFile.class)) {
+                 RandomizeFile annotation = field.getAnnotation(RandomizeFile.class);
+                 setNewValue(object,
+                         field,
+                         () -> fileBehavior(annotation, object, field),
+                         NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
+
             }
         }
         for (Method method : clazz.getDeclaredMethods()) {
