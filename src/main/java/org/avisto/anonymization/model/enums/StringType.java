@@ -1,9 +1,9 @@
 package org.avisto.anonymization.model.enums;
 
+import com.github.curiousoddman.rgxgen.RgxGen;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.interfaces.GenerableString;
-import org.avisto.rgxgen.RgxGen;
 
 import java.util.Arrays;
 import java.util.List;
@@ -61,6 +61,13 @@ public enum StringType implements GenerableString{
             return "0" + StringGenerator.generateNumber(12);
         }
     },
+    PHONE_FR {
+        @Override
+        @SuppressWarnings("unchecked")
+        public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
+            return StringGenerator.generateStringFromCollection(Arrays.asList("06", "07")) + StringGenerator.generateNumber(8);
+        }
+    },
     URL {
         @Override
         @SuppressWarnings("unchecked")
@@ -97,8 +104,8 @@ public enum StringType implements GenerableString{
         @Override
         @SuppressWarnings("unchecked")
         public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
-            if (path == null || path.isEmpty()) {
-                throw new IllegalArgumentException("On STRING_FROM_FILE type, path must not be empty or null");
+            if (path == null || path.isBlank()) {
+                throw new IllegalArgumentException("On STRING_FROM_FILE type, path must not be blank or null");
             }
             return StringGenerator.generateStringFromFile(path);
         }
@@ -119,6 +126,33 @@ public enum StringType implements GenerableString{
         public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
             return generator.generate();
         }
+    },
+    IPV4 {
+        @Override
+        @SuppressWarnings("unchecked")
+        public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
+            return String.format("%s.%s.%s.%s",
+                    NumberGenerator.generateInt(0, 256),
+                    NumberGenerator.generateInt(0, 256),
+                    NumberGenerator.generateInt(0, 256),
+                    NumberGenerator.generateInt(0, 256));
+        }
+    },
+        IPV6 {
+            @Override
+            @SuppressWarnings("unchecked")
+            public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
+
+                return String.format("%s:%s:%s:%s:%s:%s:%s:%s",
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)),
+                        Integer.toHexString(NumberGenerator.generateInt(0, 65536)));
+            }
     };
     public static final int DEFAULT_LENGTH_BEHAVIOR = -1;
 }

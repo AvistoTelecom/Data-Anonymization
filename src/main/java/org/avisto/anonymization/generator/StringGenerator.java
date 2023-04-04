@@ -26,7 +26,7 @@ public final class StringGenerator {
 
 
     /**
-     * generate a random String with random length between [ minLength , maxLength ] <br/>
+     * generate a random String with random length between [ minLength , maxLength ].<br>
      * to generate a specific length, choose a value where minLength = maxLength
      * @param minLength min length of the string to generate
      * @param maxLength max length of the string to generate
@@ -53,7 +53,7 @@ public final class StringGenerator {
     }
 
     /**
-     * generate a string of number randomly in a minValue and maxValue <br/>
+     * generate a string of number randomly in a minValue and maxValue.<br>
      * if the value doesn't fill all digits it will complete it with much 0 at the beginning
      * @param minValue min value of the string
      * @param maxValue max value of the string
@@ -71,7 +71,7 @@ public final class StringGenerator {
     }
 
     /**
-     * generate a string of number randomly of size length <br/>
+     * generate a string of number randomly of size length.
      * @param length length of the string
      * @return return a string of number of size length
      */
@@ -84,16 +84,16 @@ public final class StringGenerator {
     }
 
     /**
-     * select a random value from a file, <br/>
-     * the file must match this format: <br/>
-     * ====================== <br/>
-     * data1 <br/>
-     * data2 <br/>
-     * data3 <br/>
-     * e <br/>
-     * t <br/>
-     * c <br/>
-     * ====================== <br/>
+     * select a random value from a file,
+     * the file must match this format: <br>
+     * ======================<br>
+     * data1<br>
+     * data2<br>
+     * data3<br>
+     * e<br>
+     * t<br>
+     * c<br>
+     * ======================<br>
      * WARNING : it save the content of the file on a map, on consecutive calls,
      * the file will not be re-opened each time, so if the path didn't change and the content of the file changed,
      * it will not handle changes

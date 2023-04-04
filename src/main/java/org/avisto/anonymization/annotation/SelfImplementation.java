@@ -3,8 +3,7 @@ package org.avisto.anonymization.annotation;
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 @Inherited
-public @interface Anonyme {
-
+public @interface SelfImplementation {
 }

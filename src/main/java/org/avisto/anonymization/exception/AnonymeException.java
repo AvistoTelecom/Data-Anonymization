@@ -1,10 +1,6 @@
 package org.avisto.anonymization.exception;
 
 public class AnonymeException extends RuntimeException{
-
-    public AnonymeException() {
-    }
-
     public AnonymeException(String message) {
         super(message);
     }
