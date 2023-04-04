@@ -45,6 +45,18 @@ public final class StringGenerator {
     }
 
     /**
+     * generate "Lorem Ipsum" String with random length between [ minLength , maxLength ].<br>
+     * to generate a specific length, choose a value where minLength = maxLength
+     * @param minLength min length of the string to generate
+     * @param maxLength max length of the string to generate
+     * @return "lorem ipsum" string with a size between [ minLength, maxLength ]
+     */
+    public static String generateText(int minLength, int maxLength) {
+        int size = NumberGenerator.generateInt(minLength, maxLength + 1);
+        return LOREM_IPSUM.substring(0, size);
+    }
+
+    /**
      * generate a random String with random length between [ DEFAULT_MIN_LENGTH, DEFAULT_MAX_LENGTH ]
      * @return random string with a size between [ DEFAULT_MIN_LENGTH, DEFAULT_MAX_LENGTH ]
      */

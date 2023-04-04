@@ -16,24 +16,33 @@ public final class FileGenerator {
 
     /**
      * Generate a file based on blank file in resources in this library.
-     * The name will be generated randomly with length between 15 and 30 characters.
      * To see all extensions handled see the README.md
      * @param pathToDirectory the directory where to save the new file
      * @param name name of the new file
      * @param extension the extension type to produce
-     * @return path to the new file created if there are an exception then null
+     * @return path to the new file created, if there are an exception then null
      */
     public static String generateFile(String pathToDirectory, String name, String extension) {
-        Path original = Paths.get(String.format("%sbase.%s", SOURCE_DIRECTORY, extension));
         String newFile = pathToDirectory + name + "." + extension;
-        Path copy = Paths.get(newFile);
+        return generateFile(newFile);
+    }
+
+    /**
+     * Generate a file based on blank file in resources in this library.
+     * To see all extensions handled see the README.md
+     * @param pathToFile the path of the file
+     * @return path to the new file created, if there are an exception then null
+     */
+    public static String generateFile(String pathToFile) {
+        Path original = Paths.get(String.format("%sbase.%s", SOURCE_DIRECTORY, getExtension(pathToFile)));
+        Path copy = Paths.get(pathToFile);
         try {
             Files.copy(original, copy, StandardCopyOption.REPLACE_EXISTING);
         }
         catch (IOException e) {
             return null;
         }
-        return newFile;
+        return pathToFile;
     }
 
     /**
