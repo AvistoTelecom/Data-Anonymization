@@ -23,7 +23,6 @@ import java.util.Objects;
 public class FileAnonymizationTest {
 
     private final String directory = "src/test/resources/file/new/";
-    private final String fileName = "testFile.txt";
 
     @BeforeEach
     @AfterEach
@@ -45,6 +44,7 @@ public class FileAnonymizationTest {
 
     @Test
     public void testDeleteFile() throws IOException {
+        String fileName = "testFile.txt";
         Path newFilePath = Paths.get(directory + fileName);
         Files.createFile(newFilePath);
 
@@ -109,5 +109,18 @@ public class FileAnonymizationTest {
         FileGenerator.generateFile("src/test/resources/file/new/file.jpeg");
         file = new File("src/test/resources/file/new/file.jpeg");
         Assertions.assertTrue(file.exists());
+    }
+
+    @Test
+    public void testGenerateFileFromOrigin() {
+        FileGenerator.generateFile("src/test/resources/file/base/", "src/test/resources/file/new/file.txt");
+        File file = new File("src/test/resources/file/new/file.txt");
+        Assertions.assertTrue(file.exists());
+
+        PathException e = Assertions.assertThrows(PathException.class, () -> FileGenerator.generateFile("wrong/path/", "src/test/resources/file/new/file.txt"));
+        Assertions.assertEquals("unknown path", e.getMessage());
+
+        e = Assertions.assertThrows(PathException.class, () -> FileGenerator.generateFile("src/test/resources/file/base/", "wrong/path/file.txt"));
+        Assertions.assertEquals("unknown path", e.getMessage());
     }
 }
