@@ -7,6 +7,7 @@ package org.avisto.anonymization.generator;
 import org.avisto.anonymization.exception.HandleExtensionException;
 import org.avisto.anonymization.exception.PathException;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -63,7 +64,7 @@ public final class FileGenerator implements Generator{
      */
     public static String generateFile(String originDirectory, String pathToFile) {
         try {
-            Files.copy(Paths.get(originDirectory + "base." + getExtension(pathToFile)), Paths.get(pathToFile), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(Paths.get(originDirectory + "base." + convert(getExtension(pathToFile))), Paths.get(pathToFile), StandardCopyOption.REPLACE_EXISTING);
             return pathToFile;
         }
         catch (IOException e) {
@@ -72,7 +73,39 @@ public final class FileGenerator implements Generator{
     }
 
     /**
-     * get and return the extension in lower case of a file given
+     * It will return the byte array corresponding to the file depending on the extension given.
+     * If not found it will return an Exception
+     * @param extension format of the file expected
+     * @return byte array of file if found
+     */
+    public static byte[] generateFileAsBytes(String extension) {
+        InputStream inputStream = FileGenerator.class.getClassLoader().getResourceAsStream("file/base/base." + convert(extension));
+        if (inputStream == null) throw new HandleExtensionException("extension not handled");
+        try {
+            return inputStream.readAllBytes();
+        } catch (IOException e) {
+            throw new PathException("Unable to find the file", e);
+        }
+    }
+
+    /**
+     * It will return the byte array corresponding to the file depending on the extension given.
+     * Search the file in the directory given in parameter. file must match this format: base.[extension]
+     * If not found it will return an Exception
+     * @param originDirectory path to the directory where to find the file (ex: path/to/dir/)
+     * @param extension format of the file expected
+     * @return byte array of file if found
+     */
+    public static byte[] generateFileAsBytes(String originDirectory, String extension) {
+        try (InputStream inputStream = new FileInputStream(originDirectory + "base." + convert(extension))){
+            return inputStream.readAllBytes();
+        } catch (IOException e) {
+            throw new PathException("Unable to find the file", e);
+        }
+    }
+
+    /**
+     * get and return the extension of a file given
      * @param pathToFile file to get extension
      * @return extension
      */

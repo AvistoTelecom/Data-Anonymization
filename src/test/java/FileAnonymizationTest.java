@@ -117,10 +117,38 @@ public class FileAnonymizationTest {
         File file = new File("src/test/resources/file/new/file.txt");
         Assertions.assertTrue(file.exists());
 
-        PathException e = Assertions.assertThrows(PathException.class, () -> FileGenerator.generateFile("wrong/path/", "src/test/resources/file/new/file.txt"));
+        PathException e = Assertions.assertThrows(PathException.class,
+                () -> FileGenerator.generateFile("wrong/path/", "src/test/resources/file/new/file.txt"));
         Assertions.assertEquals("unknown path", e.getMessage());
 
-        e = Assertions.assertThrows(PathException.class, () -> FileGenerator.generateFile("src/test/resources/file/base/", "wrong/path/file.txt"));
+        e = Assertions.assertThrows(PathException.class,
+                () -> FileGenerator.generateFile("src/test/resources/file/base/", "wrong/path/file.txt"));
         Assertions.assertEquals("unknown path", e.getMessage());
+    }
+
+    @Test
+    public void testGenerateByteFromExt() {
+        byte[] bytes = FileGenerator.generateFileAsBytes("txt");
+        Assertions.assertNotNull(bytes);
+    }
+
+    @Test
+    public void testGenerateByteFromExtNotHandled() {
+        HandleExtensionException e = Assertions.assertThrows(HandleExtensionException.class,
+                () -> FileGenerator.generateFileAsBytes("notHandle"));
+        Assertions.assertEquals("extension not handled", e.getMessage());
+    }
+
+    @Test
+    public void testGenerateByteFromExtWithDir() {
+        byte[] bytes = FileGenerator.generateFileAsBytes("src/test/resources/file/base/", "txt");
+        Assertions.assertNotNull(bytes);
+    }
+
+    @Test
+    public void testGenerateByteFromWithDirExtNotHandled() {
+        PathException e = Assertions.assertThrows(PathException.class,
+                () -> FileGenerator.generateFileAsBytes("src/test/resources/file/base/", "notHandle"));
+        Assertions.assertEquals("Unable to find the file", e.getMessage());
     }
 }
