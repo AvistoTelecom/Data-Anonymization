@@ -4,7 +4,6 @@
 
 package org.avisto.anonymization.annotation;
 
-import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.StringType;
 
 import java.lang.annotation.*;
@@ -30,12 +29,12 @@ public @interface RandomizeFile {
      * set the min size the Collection can have
      * @return value
      */
-    int minSize() default StringGenerator.DEFAULT_MIN_SIZE;
+    int minSize() default 1;
     /**
      * set the max size the Collection can have
      * @return value
      */
-    int maxSize() default StringGenerator.DEFAULT_MAX_SIZE;
+    int maxSize() default 10;
 
     /**
      * define if the old file must be removed

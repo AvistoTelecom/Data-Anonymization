@@ -7,6 +7,7 @@ import org.avisto.anonymization.exception.AnonymeException;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.MethodGenerationException;
 import org.avisto.anonymization.generator.FileGenerator;
+import org.avisto.anonymization.generator.Generator;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.model.enums.StringType;
 
@@ -122,6 +123,16 @@ public class ObjectAnonymizer implements Randomizer {
                 FileGenerator.getExtension(originalFile));
     }
 
+    private <T extends Enum<T>> T enumBehavior(Field field) {
+        Class<?> type = field.getType();
+        if (Enum.class.isAssignableFrom(type)) {
+            T[] values = (T[]) type.getEnumConstants();
+            return Generator.generateValueFromCollection(values);
+        } else {
+            throw new BadUseAnnotationException("field should be enumeration");
+        }
+    }
+
     private <T> void setNewValue(T object , Field field, Supplier<T> supplier, int size) {
         if (callGetterMethod(object, field) != null) {
             if (!(Iterable.class.isAssignableFrom(field.getType()))) {
@@ -153,8 +164,7 @@ public class ObjectAnonymizer implements Randomizer {
                         field,
                         () -> numberBehavior(annotation),
                         NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
-            }
-             else if (field.isAnnotationPresent(RandomizeString.class)) {
+            } else if (field.isAnnotationPresent(RandomizeString.class)) {
                 RandomizeString annotation = field.getAnnotation(RandomizeString.class);
                 setNewValue(object,
                         field,
@@ -167,6 +177,12 @@ public class ObjectAnonymizer implements Randomizer {
                          () -> fileBehavior(annotation, object, field),
                          NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
 
+            } else if (field.isAnnotationPresent(RandomizeEnum.class)) {
+            RandomizeEnum annotation = field.getAnnotation(RandomizeEnum.class);
+            setNewValue(object,
+                    field,
+                    () -> enumBehavior(field),
+                    NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
             }
         }
         for (Method method : clazz.getDeclaredMethods()) {

@@ -24,7 +24,7 @@ public enum NumberType implements GenerableNumber {
         public Float getRandomValue(String min, String max) {
             Float minValue = min.equals(BEHAVIOR) ? -Float.MAX_VALUE : Float.parseFloat(min);
             Float maxValue = max.equals(BEHAVIOR) ? Float.MAX_VALUE : Float.parseFloat(max);
-            return NumberGenerator.generateFloat(minValue, maxValue); }
+            return NumberGenerator.generateDouble(minValue.doubleValue(), maxValue.doubleValue()).floatValue(); }
     },
     DOUBLE {
         @Override
