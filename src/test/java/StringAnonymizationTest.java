@@ -214,4 +214,16 @@ public class StringAnonymizationTest {
         IllegalArgumentException e = Assertions.assertThrows(IllegalArgumentException.class, () -> StringGenerator.generateStringFromFile("PATH/TO/FILE.txt"));
         Assertions.assertEquals("file PATH/TO/FILE.txt not found", e.getMessage());
     }
+
+    @Test
+    public void testNumberGenerator() {
+        String n = StringGenerator.generateNumber(1, 1, 2);
+        Assertions.assertEquals("01", n);
+    }
+
+    @Test
+    public void testTextGenerator() {
+        String n = StringGenerator.generateText(5, 5);
+        Assertions.assertEquals("Lorem", n);
+    }
 }

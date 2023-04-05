@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Class that generate all type of number with random basis
  * @author desaintpern
  */
-public final class NumberGenerator {
+public final class NumberGenerator implements Generator{
 
     /**
      * Text that is used for exception when a min value is greater than max value

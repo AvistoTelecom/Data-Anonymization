@@ -4,6 +4,9 @@
 
 import model.Model;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
+import org.avisto.anonymization.exception.FileException;
+import org.avisto.anonymization.exception.HandleExtensionException;
+import org.avisto.anonymization.exception.PathException;
 import org.avisto.anonymization.generator.FileGenerator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -50,14 +53,17 @@ public class FileAnonymizationTest {
     }
 
     @Test
-    public void testGenerateFile() {
+    public void testGenerateFile() throws FileException {
         String newFile = FileGenerator.generateFile(directory, "file", "txt");
         Assertions.assertEquals("src/test/resources/file/new/file.txt", newFile);
         File file = new File("src/test/resources/file/new/file.txt");
         Assertions.assertTrue(file.exists());
 
-        String newFileNull = FileGenerator.generateFile(directory, "file", "notHandle");
-        Assertions.assertNull(newFileNull);
+        FileException e = Assertions.assertThrows(HandleExtensionException.class, () -> FileGenerator.generateFile(directory, "file", "notHandle"));
+        Assertions.assertEquals("extension not handled", e.getMessage());
+
+        e = Assertions.assertThrows(PathException.class, () -> FileGenerator.generateFile("no/directory/there", "file", "txt"));
+        Assertions.assertEquals("unknown path", e.getMessage());
     }
 
     @Test
@@ -91,6 +97,17 @@ public class FileAnonymizationTest {
         Assertions.assertTrue(file.exists());
 
         file = new File("src/test/resources/file/new/newFile.txt");
+        Assertions.assertTrue(file.exists());
+    }
+
+    @Test
+    public void testConvert() {
+        FileGenerator.generateFile("src/test/resources/file/new/file.htm");
+        File file = new File("src/test/resources/file/new/file.htm");
+        Assertions.assertTrue(file.exists());
+
+        FileGenerator.generateFile("src/test/resources/file/new/file.jpeg");
+        file = new File("src/test/resources/file/new/file.jpeg");
         Assertions.assertTrue(file.exists());
     }
 }

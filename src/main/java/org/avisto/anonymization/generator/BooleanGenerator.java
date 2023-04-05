@@ -4,7 +4,7 @@ package org.avisto.anonymization.generator;
  * @author desaintpern
  * Static Class that have methods to give random boolean
  */
-public final class BooleanGenerator {
+public final class BooleanGenerator implements Generator{
 
     /**
      * generate a random boolean with a probability equals to 50% for true and 50% for false

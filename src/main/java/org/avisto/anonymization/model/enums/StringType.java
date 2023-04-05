@@ -1,12 +1,10 @@
 package org.avisto.anonymization.model.enums;
 
 import com.github.curiousoddman.rgxgen.RgxGen;
+import org.avisto.anonymization.generator.Generator;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.interfaces.GenerableString;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author desaintpern
@@ -65,14 +63,14 @@ public enum StringType implements GenerableString{
         @Override
         @SuppressWarnings("unchecked")
         public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
-            return StringGenerator.generateStringFromCollection(Arrays.asList("06", "07")) + StringGenerator.generateNumber(8);
+            return Generator.generateValueFromCollection(new String[]{"06", "07"}) + StringGenerator.generateNumber(8);
         }
     },
     URL {
         @Override
         @SuppressWarnings("unchecked")
         public String getRandomValue(int minLength, int maxLength, String path, String[] possibleValues, RgxGen generator) {
-            String prefix = StringGenerator.generateStringFromCollection(Arrays.asList("https://", "http://"));
+            String prefix = Generator.generateValueFromCollection(new String[]{"https://", "http://"});
             String link = String.format("%s/%s/%s",
                     StringGenerator.generateString(5,10),
                     StringGenerator.generateString(5,10),
@@ -117,7 +115,7 @@ public enum StringType implements GenerableString{
             if (possibleValues == null || possibleValues.length == 0) {
                 throw new IllegalArgumentException("On STRING_FROM_ARRAY type, possibleValues must not be empty or null");
             }
-            return StringGenerator.generateStringFromCollection(List.of(possibleValues));
+            return Generator.generateValueFromCollection(possibleValues);
         }
     },
     REGEX {
