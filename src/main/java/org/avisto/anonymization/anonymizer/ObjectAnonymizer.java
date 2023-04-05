@@ -25,7 +25,11 @@ import java.util.function.Supplier;
 public class ObjectAnonymizer implements Randomizer {
 
     private RgxGen rgxGen;
-    
+
+    /**
+     * anonymize the object given.
+     * @param object object to anonymize
+     */
     public <T> void anonymize(T object) {
         try {
             checkIfAnonymizable(object);
@@ -36,6 +40,10 @@ public class ObjectAnonymizer implements Randomizer {
         }
     }
 
+    /**
+     * anonymize the objects given.
+     * @param objectCollection objects to anonymize
+     */
     public <T> void anonymize(Iterable<T> objectCollection) {
         if (Objects.isNull(objectCollection)) { throw new BadUseAnnotationException("The object to anonymize is null"); }
         try {
@@ -123,6 +131,7 @@ public class ObjectAnonymizer implements Randomizer {
                 FileGenerator.getExtension(originalFile));
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends Enum<T>> T enumBehavior(Field field) {
         Class<?> type = field.getType();
         if (Enum.class.isAssignableFrom(type)) {
