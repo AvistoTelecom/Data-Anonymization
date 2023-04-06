@@ -1,7 +1,3 @@
-/*
- *
- */
-
 package org.avisto.anonymization.generator;
 
 import org.avisto.anonymization.exception.HandleExtensionException;

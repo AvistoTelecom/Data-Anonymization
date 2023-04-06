@@ -2,7 +2,12 @@ package org.avisto.anonymization.anonymizer;
 
 
 import com.github.curiousoddman.rgxgen.RgxGen;
-import org.avisto.anonymization.annotation.*;
+import org.avisto.anonymization.annotation.Anonyme;
+import org.avisto.anonymization.annotation.RandomizeEnum;
+import org.avisto.anonymization.annotation.RandomizeFile;
+import org.avisto.anonymization.annotation.RandomizeNumber;
+import org.avisto.anonymization.annotation.RandomizeString;
+import org.avisto.anonymization.annotation.SelfImplementation;
 import org.avisto.anonymization.exception.AnonymeException;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.MethodGenerationException;

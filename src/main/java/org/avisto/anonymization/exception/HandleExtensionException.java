@@ -1,7 +1,3 @@
-/*
- *
- */
-
 package org.avisto.anonymization.exception;
 
 public class HandleExtensionException extends FileException{
