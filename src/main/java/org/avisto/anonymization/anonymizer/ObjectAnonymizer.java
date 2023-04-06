@@ -187,11 +187,10 @@ public class ObjectAnonymizer implements Randomizer {
                          NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
 
             } else if (field.isAnnotationPresent(RandomizeEnum.class)) {
-            RandomizeEnum annotation = field.getAnnotation(RandomizeEnum.class);
             setNewValue(object,
                     field,
                     () -> enumBehavior(field),
-                    NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
+                    0);
             }
         }
         for (Method method : clazz.getDeclaredMethods()) {
