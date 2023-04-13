@@ -17,8 +17,8 @@ public final class NumberGenerator implements Generator{
 
 
     /**
-     * Generate a random Float, the value is between [ -Float.MAX_VALUE, Float.MAX_VALUE [
-     * @return random float in [ -Float.MAX_VALUE, Float.MAX_VALUE [
+     * Generate a random Float
+     * @return random float
      */
     public static Float generateFloat() {
         return ((ThreadLocalRandom.current().nextFloat() - 0.5f) * 2) * Float.MAX_VALUE;
@@ -39,18 +39,18 @@ public final class NumberGenerator implements Generator{
 
 
     /**
-     * Generate a random Double, the value is between [ -Double.MAX_VALUE, Double.MAX_VALUE [
-     * @return random Double in [ -Double.MAX_VALUE, Double.MAX_VALUE [
+     * Generate a random Double
+     * @return random Double
      */
     public static Double generateDouble() {
         return ((ThreadLocalRandom.current().nextDouble() - 0.5) * 2) * Double.MAX_VALUE;
     }
 
     /**
-     * Generate a random Double, the value is between [ -Double.MAX_VALUE, Double.MAX_VALUE [
+     * Generate a random Double, the value is between [ min, max [
      * @param min min value
      * @param max max value
-     * @return random Double in [ -Double.MAX_VALUE, Double.MAX_VALUE [
+     * @return random Double in [ min, max [
      */
     public static Double generateDouble(Double min, Double max ) {
         if (min >= max) {

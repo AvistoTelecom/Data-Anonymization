@@ -51,7 +51,7 @@ public final class FileGenerator implements Generator{
 
     /**
      * Generate a file based on file in originDirectory.<br>
-     * To work, files must match base.[extension]
+     * To work, files must match base.{extension}
      * @param pathToFile the path of the file
      * @param originDirectory path to directory where to find base file (ex: "/dir/of/files/")
      * @return path to the new file created, if there are an exception then null
