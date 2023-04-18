@@ -226,4 +226,10 @@ public class StringAnonymizationTest {
         String n = StringGenerator.generateText(5, 5);
         Assertions.assertEquals("Lorem", n);
     }
+
+    @Test
+    public void testRegexGenerator() {
+        String n = StringGenerator.generateFromRegex("[a-z]{2,3}[0-9]{10}");
+        Assertions.assertTrue(Pattern.matches("[a-z]{2,3}[0-9]{10}", n));
+    }
 }

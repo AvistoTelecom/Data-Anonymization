@@ -1,5 +1,7 @@
 package org.avisto.anonymization.generator;
 
+import com.github.curiousoddman.rgxgen.RgxGen;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -96,6 +98,16 @@ public final class StringGenerator implements Generator {
             result[i] = NUMBER.charAt(NumberGenerator.generateInt(0,10));
         }
         return String.valueOf(result);
+    }
+
+    /**
+     * generate a string that match the pattern given
+     * @param pattern pattern to match
+     * @return the string matching the pattern
+     */
+    public static String generateFromRegex(String pattern) {
+        RgxGen gen = new RgxGen(pattern);
+        return gen.generate();
     }
 
     /**
