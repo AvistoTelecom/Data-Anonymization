@@ -2,8 +2,12 @@
 
 ## Description
 
-This library have for main purpose to randomize sensitive data.
-For this purpose, this library gives numerous tools to achieve anonymization.
+This document depicts the sensitive data randomization library.
+For this purpose, this library gives several tools to achieve anonymization.
+
+Below, the plan:
+1. Using annotation
+2. Using available utility class
 
 The first one is by using annotation, the second one is by using utility class available.
 
@@ -12,23 +16,23 @@ The first one is by using annotation, the second one is by using utility class a
 /!\ à compléter 
 
 ## Usage
-To allow the ObjectAnonymizer to anonymize your Object, the Class must be annotated with @Anonyme.
+To allow the **ObjectAnonymizer** to anonymize your Object, the Class must be annotated with @Anonyme.
 
-Then all fields that need to be anonymized must be annotated with annotation depending on the field type.
+Then all fields that need to be anonymized must have the annotation depending on the field type.
 
 If a field is null, then it will let the value to null.
 
-Following, some examples of how to use the library.
+Below, few examples.
 
 ### Examples
 
 #### Basic use
 <details>
     <summary>
-        Simple Example using only annotation
+        <i>Simple example using only annotation</i>
     </summary>
 
-In this example, we want to randomize value with the simplest way.
+In this example, we want to randomize value.
 First we set annotation **@Anonyme** on the class, then we annotate fields that need to be randomized.
 
 ````java
@@ -65,20 +69,23 @@ public class Main {
 }
 ````
 
-There, all fields annotated will be randomized based on the behavior given in the annotation.
+    Output: 
+    p -> { firstName : adispmd, lastName : zr, email : azrfsq.gfzeryda@gyfdg.ftd, number : 791310314, longs : [16, 20, 21, 19] }
+
+Here, all the annotated fields will be randomized based on the behavior given in the annotation.
 
 </details>
 
 <details>
     <summary>
-        Example using custom implementation
+        <i>Example with a custom implementation</i>
     </summary>
 
-In this example, we want to randomize firstName and lastName using annotation, we want fullName as firstName and lastName anonymized separated by a space.
+In this example, we want to randomize **firstName** and **lastName** using annotation. We want **fullName** as **firstName** and **lastName** anonymized separated by a space.
 
-For this, we can use **@SelfImplementation** as following to consider other fields during the anonymization.
+We can use **@SelfImplementation** as following to consider other fields during the anonymization.
 
-First, we set annotation **@Anonyme** on the class, then we annotate fields firstName and lastName.
+**First**, we set annotation **@Anonyme** on the class, then we annotate fields **firstName** and **lastName**.
 At last, we create a method that will be annotated with **@SelfImplementation**.
 
 A method annotated with **@SelfImplementation** will be called after field anonymization.
@@ -117,22 +124,25 @@ public class Main {
 }
 ````
 
-In this case, the firstName and lastName will be randomized by annotation.
-At the end, the method customExample( ) will be called so fullName will be the firstName and lastName that have been randomized.
+    Output: 
+    p -> { firstName : fqudqpfgq, lastName : ld, fullName : fqudqpfgq ld }
+
+In this case, the **firstName** and **lastName** will be randomized thanks to the annotation.
+At the end, the method **customExample( )** will be called so fullName will be the firstName and lastName that have been randomized.
 
 </details>
 
 
 <details>
     <summary>
-        Example using utility class in custom implementation
+        <i>Example using utility class in custom implementation</i>
     </summary>
 
 In this example, we want to randomize fields but with specific behavior.
 
 In this case utility class can be used for this purpose.
 
-First we set annotation **@Anonyme** on the class, then we create a method that will be annotated with **@SelfImplementation**.
+**First** we set **@Anonyme** annotation on the top of the class, then we create a method that will be annotated with **@SelfImplementation**.
 
 ````java
 @Anonyme
@@ -160,21 +170,22 @@ public class Main {
 }
 ````
 
-Here full name will be constructed as a random string of random size between default value given
+    Output:
+    p -> { fullName : buczohco jfpz }
+
+Here **fullName** will be constructed as a random string of random size between default value given
 [here](#staticStringGenerator) and a random string of size between 4 and 5, separated by a space.
 
 </details>
 
 <details>
     <summary>
-        Example without annotation
+        <i>Example without annotation</i>
     </summary>
 
-In this example, we want to randomize firstName and lastName and anonymize the CV without any annotation.
+In this example, we want to randomize **firstName** and **lastName** and anonymize the cv without any annotation.
 
 Here the old cv is deleted then create a new cv without any content.
-
-
 
 ````java
 public class Person {
@@ -204,57 +215,67 @@ public class Main {
 }
 ````
 
+    Output: 
+    p -> { firstName : bqcioud, lastName : chquif, cvUri : tmp/cv/new_name.pdf }
+
+The file "tmp/cv/new_name.pdf" is created.
+
 </details>
 
-#### utility class
+#### Utility class
 
 <details>
     <summary>
-       StringGenerator
+       <i>StringGenerator</i>
     </summary>
 
 ````java
-import org.avisto.anonymization.generator.StringGenerator;
-
 public class Main {
     public static void main(String[] args) {
         String v1 = StringGenerator.generateString();
         // v1 = a random string with length between default value define in StringGenerator class
+        // output : v1 -> sdosgsgios
 
         String v2 = StringGenerator.generateString(1, 3);
         // v2 = a random string with length between 1 and 3
+        // output : v2 -> fid
 
         String v3 = StringGenerator.generateNumber(10, 16, 3);
         // v3 = a number as string between the first and second parameter and fill with 0 at the beginning to have a length equals to the last parameter
-
+        // output : v3 -> 014
+        
         String v4 = StringGenerator.generateNumber(4);
         // v4 = string of 4 number
+        // output : v4 -> 9463
 
         String v5 = StringGenerator.generateText(1, 5);
         // v5 = string of length between 1 and 5, the string is based on LOREM_IPSUM field in class StringGenerator
-
-        String v6 = StringGenerator.generateStringFromFile("path/To/File/example.txt");
+        // output : v5 -> Lor
+            
+        String v6 = StringGenerator.generateStringFromFile("tmp/file/example.txt");
         // v6 = random value get in the file given
+        // output : v6 -> example
 
         String v7 = StringGenerator.generateFromRegex("[a-z]{2}[0-9]{3}");
-        // v7 = string that match the pattern given 
+        // v7 = string that match the pattern given
+        // output : v7 -> rc083
     }
 }
 ````
-Here the file example.txt contains :<br>
+
+Here the file _example.txt_ contains :<br>
+
 _________
 An<br>
 example
 _________
-
-See supported regex pattern syntax [here](https://github.com/curious-odd-man/RgxGen#supported-syntax).
-
+    
 </details>
 
 
 <details>
     <summary>
-       NumberGenerator
+       <i>NumberGenerator</i>
     </summary>
 
 ````java
@@ -291,36 +312,39 @@ public class Main {
 
 <details>
     <summary>
-       FileGenerator
+       <i>FileGenerator</i>
     </summary>
 
 ````java
 public class Main {
     public static void main(String[] args) {
-        String v1 = FileGenerator.generateFile("/tmp", "name_of_file", "pdf"); // create a file of extension pdf
+        String v1 = FileGenerator.generateFile("/tmp", "name_of_file", "pdf"); // create a pdf file
         // v1 = string corresponding of path where the file has been created
-        // here : /tmp/name_of_file.pdf
+        // output : v1 -> /tmp/name_of_file.pdf
 
-        String v2 = FileGenerator.generateFile("/tmp/name_of_file.pdf"); // create a file of extension pdf
+        String v2 = FileGenerator.generateFile("/tmp/name_of_file.pdf"); // create a pdf file
         // v2 = string corresponding of path where the file has been created
-        // here : /tmp/name_of_file.pdf
+        //  output : v2 -> /tmp/name_of_file.pdf
 
         String v3 = FileGenerator.generateFile("/tmp/my_base_directory/", "/tmp/name_of_file.png"); // search a base file name base.png in the directory given as first parameter then create a copy to the path given in second parameter
         // v3 = string corresponding of path where the file has been created
-        // here : /tmp/name_of_file.png
+        //  output : v3 -> /tmp/name_of_file.png
 
         byte[] v4 = FileGenerator.generateFileAsBytes("jpeg");
-        // v4 = array of byte corresponding of a base file of extension jpeg
+        // v4 = array of byte corresponding of a base jpeg file
+        // output : v4 -> [65, -115, 30, 78, -10, ...]
 
         byte[] v5 = FileGenerator.generateFileAsBytes("/tmp/my_base_directory/", "txt"); // search a base file name base.txt in the directory given as first parameter to return as byte array
         // v5 = array of byte corresponding of a base file txt get in the directory given as first param
+        // output : v5 -> []
 
         String v6 = FileGenerator.getExtension("/tmp/name_of_file.pdf");
         // v6 = extension of the file
-        // here : pdf
+        // output : v6 -> pdf
 
         boolean v7 = FileGenerator.deleteFile("/tmp/file_to_delete.docx");
         // v7 = boolean that indicate if it has deleted the file given properly
+        // output : v5 -> true
     }
 }
 ````
@@ -328,7 +352,7 @@ public class Main {
 
 <details>
     <summary>
-       BooleanGenerator
+       <i>BooleanGenerator</i>
     </summary>
 
 ````java
@@ -338,9 +362,11 @@ public class Main {
     public static void main(String[] args) {
         boolean v1 = BooleanGenerator.generateBoolean();
         // v1 = boolean that have 50% chance to be true 
+        // output : v1 -> true
 
         boolean v2 = BooleanGenerator.generateBoolean(0.3);
         // v2 = boolean that have 30% chance to be true
+        // output : v2 -> false
     }
 }
 ````
@@ -350,7 +376,7 @@ public class Main {
 
 <details>
     <summary>
-       Generator
+       <i>Generator</i>
     </summary>
 
 ````java
@@ -368,9 +394,11 @@ public class Main {
         
         String v1 = Generator.generateValueFromCollection(values);
         // v1 = random value from values 
+        // output : v1 -> first value
 
         int v2 = Generator.generateValueFromCollection(new Integer[]{12, 10, 8});
         // v2 = random value from array given 
+        // output : v2 -> 10
         // work only on arrays of Objects not primitives
     }
 }
@@ -390,7 +418,7 @@ Here we used String and Integer, but it can be any Object.
 **Enum that represents all handled number types generation.**
 <details>
     <summary>
-        Available values
+        <i>Available values</i>
     </summary>
 
 Values:
@@ -405,7 +433,7 @@ Values:
 
 <details>
     <summary>
-        Available values
+        <i>Available values</i>
     </summary>
 
 Values:
@@ -429,16 +457,16 @@ Values:
 
 <details>
     <summary>
-        Parameters
+        <i>Parameters</i>
     </summary>
 
-|     name | type       | is optional | default   | description                |
-|---------:|------------|-------------|-----------|----------------------------|
-|    value | NumberType | false       | none      | behavior                   |
-| minValue | String     | true        | "default" | min value                  |
-| maxValue | String     | true        | "default" | max value                  |
-|  minSize | int        | true        | 1         | min size of the collection |
-|  maxSize | int        | true        | 15        | max size of the collection |
+|      name | type       | is optional | default   | description                |
+|----------:|------------|-------------|-----------|----------------------------|
+|     value | NumberType | false       | none      | behavior                   |
+|  minValue | String     | true        | "default" | min value                  |
+|  maxValue | String     | true        | "default" | max value                  |
+|   minSize | int        | true        | 1         | min size of the collection |
+|   maxSize | int        | true        | 15        | max size of the collection |
 
 The default min (alt. max) value is the minimal (alt. maximal) value possible depending on the NumberType.
 
@@ -450,7 +478,7 @@ minSize and maxSize are used only if the field is a collection.
 
 <details>
     <summary>
-        Parameters usage by NumberType value
+        <i>Parameters usage by NumberType value</i>
     </summary>
 
 |   value | parameters                               | description     |
@@ -462,11 +490,11 @@ minSize and maxSize are used only if the field is a collection.
 
 </details>
 
-### RandomizeString <a id='stringAnnotation'/>
+### RandomizeString <a id='stringAnnotation'></a>
 
 <details>
     <summary>
-        Parameters
+        <i>Parameters</i>
     </summary>
 
 |           name | type            | is optional | default         | description                               |
@@ -493,7 +521,7 @@ See supported regex pattern syntax [here](https://github.com/curious-odd-man/Rgx
 
 <details>
     <summary>
-        Parameters usage by StringType value
+        <i>Parameters usage by StringType value</i>
     </summary>
 
 |                  value | parameters                             | description                                                                               |
@@ -522,7 +550,7 @@ See supported regex pattern syntax [here](https://github.com/curious-odd-man/Rgx
 
 <details>
     <summary>
-        Parameters
+        <i>Parameters</i>
     </summary>
 
 |             name | type             | is optional | default                                                                     | description                                      |
@@ -541,7 +569,7 @@ See more about nameFileBehavior on [RandomizeString](#stringAnnotation).
 
 <details>
     <summary>
-        Handled formats
+        <i>Handled formats</i>
     </summary>
 
 |    format    | extension                                   |
@@ -572,7 +600,7 @@ This can be used if you want to make custom behavior on some field.
 
 ## Generator
 
-All methods used in the library, except for regex, use these classes to generate different values. These classes are utility class, that means it doesn't need to be instantiated.
+All methods used in the library, except for regex, use these classes to generate different values. These classes are utility classes, that means it doesn't need to be instantiated.
 
 |    class name    |
 |:----------------:|
@@ -588,20 +616,20 @@ See more about these classes and methods below.
 
 <details>
     <summary>
-        Generator
+        <i>Generator</i>
     </summary>
 
 ### static method
 
-`generateValueFromCollection( List<T> origin )` => Return a random value in the parameter origin.
+`generateValueFromCollection( List<T> origin )` => Return a random value selected from the given list.
 
-`generateValueFromCollection( T[] origin )` => Return a random value in the parameter origin.
+`generateValueFromCollection( T[] origin )` => Return a random value selected from the given array.
 
 </details>
 
 <details>
     <summary>
-        BooleanGenerator
+        <i>BooleanGenerator</i>
     </summary>
 
 ### static method
@@ -615,7 +643,7 @@ See more about these classes and methods below.
 
 <details>
     <summary>
-        NumberGenerator
+        <i>NumberGenerator</i>
     </summary>
 
 ### static method
@@ -640,10 +668,10 @@ See more about these classes and methods below.
 
 <details>
     <summary>
-        StringGenerator
+        <i>StringGenerator</i>
     </summary>
 
-### static field <a id='staticStringGenerator'/>
+### static field <a id='staticStringGenerator'></a>
 int **DEFAULT_MAX_LENGTH** = 12
 
 int **DEFAULT_MAX_SIZE** = 10
@@ -656,7 +684,7 @@ String **LOREM_IPSUM** => basic lorem ipsum
 
 ### static method
 
-`generateNumber( int length )` => Return a string of { length } number.
+`generateNumber( int length )` => Return a string of { length } digits.
 
 `generateNumber( long minValue, long maxValue, int digits )` => Return a string of random numbers in a minValue and maxValue.
 If the value doesn't fill all digits it will complete it with enough 0 at the beginning.
@@ -680,13 +708,12 @@ On consecutive calls, the file will not be re-opened each time, so if the path d
 `generateText(int minLength, int maxLength)` => Generate "Lorem Ipsum" String with random length between [ minLength , maxLength ].
 To generate a specific length, choose a value where minLength = maxLength.
 
-
 `generateFromRegex( String pattern )` => Generate a string that match the pattern given
 </details>
 
 <details>
     <summary>
-        FileGenerator
+        <i>FileGenerator</i>
     </summary>
 
 ### static method
@@ -717,7 +744,7 @@ It will get a template file on the originDirectory given, the template must matc
 
 </details>
 
-## Limitation
+## Limitations
 
 **Table of all handled types**
 
@@ -738,9 +765,11 @@ The regex generation is based on library [RgxGen version 1.4](https://github.com
 
 Getter and Setter must be declared with a name format: setFieldName, getFieldName. 
 
-This library works with default getter and setter build with Lombok.
+This library works with default getter and setter built with Lombok.
 
 If a field has null value it will stay null.
+
+The library works on Java 11+.
 
 ## Contributing
 /!\ TO COMPLETE
