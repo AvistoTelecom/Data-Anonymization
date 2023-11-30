@@ -2,15 +2,23 @@ package org.avisto.anonymization.anonymizer;
 
 
 import com.github.curiousoddman.rgxgen.RgxGen;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.avisto.anonymization.annotation.Anonyme;
 import org.avisto.anonymization.annotation.RandomizeEnum;
 import org.avisto.anonymization.annotation.RandomizeFile;
 import org.avisto.anonymization.annotation.RandomizeNumber;
 import org.avisto.anonymization.annotation.RandomizeString;
 import org.avisto.anonymization.annotation.SelfImplementation;
+import org.avisto.anonymization.annotation.Unique;
 import org.avisto.anonymization.exception.AnonymeException;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.MethodGenerationException;
+import org.avisto.anonymization.exception.UniqueException;
 import org.avisto.anonymization.generator.FileGenerator;
 import org.avisto.anonymization.generator.Generator;
 import org.avisto.anonymization.generator.NumberGenerator;
@@ -30,6 +38,12 @@ import java.util.function.Supplier;
 public class ObjectAnonymizer implements Randomizer {
 
     private RgxGen rgxGen;
+
+    private Map<String, Set<String>> objectList;
+
+    public ObjectAnonymizer() {
+        this.objectList = new HashMap<>();
+    }
 
     /**
      * anonymize the object given.
@@ -168,40 +182,66 @@ public class ObjectAnonymizer implements Randomizer {
         }
     }
 
+    private <T> void randomizeField(T object, Field field) {
+        if (field.isAnnotationPresent(RandomizeNumber.class)) {
+            RandomizeNumber annotation = field.getAnnotation(RandomizeNumber.class);
+            setNewValue(object,
+                field,
+                () -> numberBehavior(annotation),
+                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                annotation.randomizeNull());
+        } else if (field.isAnnotationPresent(RandomizeString.class)) {
+            RandomizeString annotation = field.getAnnotation(RandomizeString.class);
+            setNewValue(object,
+                field,
+                () -> stringBehavior(annotation),
+                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                annotation.randomizeNull());
+        } else if (field.isAnnotationPresent(RandomizeFile.class)) {
+            RandomizeFile annotation = field.getAnnotation(RandomizeFile.class);
+            setNewValue(object,
+                field,
+                () -> fileBehavior(annotation, object, field),
+                NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                false);
+        } else if (field.isAnnotationPresent(RandomizeEnum.class)) {
+            RandomizeEnum annotation = field.getAnnotation(RandomizeEnum.class);
+            setNewValue(object,
+                field,
+                () -> enumBehavior(field),
+                0,
+                annotation.randomizeNull());
+        }
+    }
+
+    private <T> void isUnique(Field field, T object, Class<?> clazz) {
+        String objectField = clazz.getName() + '.' + field.getName();
+        if (callGetterMethod(object, field) == null)
+            throw new UniqueException(String.format("A field with a unique key can't be equal to null", field.getName(), clazz));
+        String value = callGetterMethod(object, field).toString();
+        if (objectList.containsKey(objectField)) {
+            if (!objectList.get(objectField).add(value)) {
+                for (int i = 0; i < 100; i++) {
+                    randomizeField(object, field);
+                    String value_loop = callGetterMethod(object, field).toString();
+                    if (objectList.get(objectField).add(value_loop))
+                        break;
+                    if (i == 99)
+                        throw new UniqueException(String.format("Can't anonymize this field who contain a unique key", field.getName(), clazz));
+                }
+            }
+        } else {
+            objectList.put(objectField, new HashSet<>(Set.of(value)));
+        }
+    }
+
     @Override
     public <T> void randomize(T object) {
         Class<?> clazz = object.getClass();
         for (Field field : clazz.getDeclaredFields()) {
-            if (field.isAnnotationPresent(RandomizeNumber.class)) {
-                RandomizeNumber annotation = field.getAnnotation(RandomizeNumber.class);
-                setNewValue(object,
-                        field,
-                        () -> numberBehavior(annotation),
-                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
-                        annotation.randomizeNull());
-            } else if (field.isAnnotationPresent(RandomizeString.class)) {
-                RandomizeString annotation = field.getAnnotation(RandomizeString.class);
-                setNewValue(object,
-                        field,
-                        () -> stringBehavior(annotation),
-                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
-                        annotation.randomizeNull());
-            } else if (field.isAnnotationPresent(RandomizeFile.class)) {
-                 RandomizeFile annotation = field.getAnnotation(RandomizeFile.class);
-                 setNewValue(object,
-                        field,
-                        () -> fileBehavior(annotation, object, field),
-                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
-                        false);
-
-            } else if (field.isAnnotationPresent(RandomizeEnum.class)) {
-                RandomizeEnum annotation = field.getAnnotation(RandomizeEnum.class);
-                setNewValue(object,
-                        field,
-                        () -> enumBehavior(field),
-                        0,
-                        annotation.randomizeNull());
-            }
+            if (field.isAnnotationPresent(Unique.class))
+                isUnique(field, object, clazz);
+            randomizeField(object, field);
         }
         for (Method method : clazz.getDeclaredMethods()) {
             if (method.isAnnotationPresent(SelfImplementation.class)) {

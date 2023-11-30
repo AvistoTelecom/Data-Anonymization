@@ -1,5 +1,7 @@
 import model.NumberTestModel;
+import model.StringTestModel;
 import org.avisto.anonymization.annotation.RandomizeNumber;
+import org.avisto.anonymization.annotation.Unique;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.model.enums.NumberType;
@@ -103,6 +105,19 @@ public class NumberAnonymizationTest {
 
         IllegalArgumentException doubleException = Assertions.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateDouble(5d, 3d));
         Assertions.assertEquals(minGreaterThanMaxErrorMessage, doubleException.getMessage());
+    }
+
+    @Test
+    public void testUniqueNumber() {
+        for (int i = 0; i < 100; i++) {
+             NumberTestModel model = new NumberTestModel() {
+                @Unique
+                @RandomizeNumber(value = NumberType.INT, minValue = "1")
+                public Integer intValue;
+            };
+            model.setIntValue(1);
+            anonymizer.anonymize(model);
+        }
     }
 
     @Test

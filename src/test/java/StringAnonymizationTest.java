@@ -1,5 +1,6 @@
 import model.StringTestModel;
 import org.avisto.anonymization.annotation.RandomizeString;
+import org.avisto.anonymization.annotation.Unique;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
 import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.StringType;
@@ -231,6 +232,20 @@ public class StringAnonymizationTest {
     public void testRegexGenerator() {
         String n = StringGenerator.generateFromRegex("[a-z]{2,3}[0-9]{10}");
         Assertions.assertTrue(Pattern.matches("[a-z]{2,3}[0-9]{10}", n));
+    }
+
+    @Test
+    public void testUniqueString() {
+        for (int i = 0; i < 100; i++) {
+            StringTestModel model = new StringTestModel() {
+                @Unique
+                @RandomizeString(value = StringType.STRING, maxLength = 2, minLength = StringTestModel.MIN_LENGTH, minSize = StringTestModel.MIN_SIZE, maxSize = 2)
+                public String value;
+            };
+            init(model);
+            model.setValue("ok");
+            anonymizer.anonymize(model);
+        }
     }
 
     @Test
