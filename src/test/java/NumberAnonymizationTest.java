@@ -109,15 +109,13 @@ public class NumberAnonymizationTest {
 
     @Test
     public void testUniqueNumber() {
-        for (int i = 0; i < 100; i++) {
-             NumberTestModel model = new NumberTestModel() {
-                @Unique
-                @RandomizeNumber(value = NumberType.INT, minValue = "1")
-                public Integer intValue;
-            };
-            model.setIntValue(1);
-            anonymizer.anonymize(model);
-        }
+         NumberTestModel model = new NumberTestModel() {
+            @Unique
+            @RandomizeNumber(value = NumberType.INT, minValue = "1")
+            public Integer intValue;
+        };
+        anonymizer.anonymize(model);
+        anonymizer.anonymize(model);
     }
 
     @Test

@@ -63,6 +63,12 @@ public @interface RandomizeString {
     String pattern() default "[a-z]{5,12}";
 
     /**
+     * specify whether the field has a unique key
+     * @return value
+     */
+    boolean isUnique() default false;
+
+    /**
      * specify if a null field should be anonymized
      * @return value
      */

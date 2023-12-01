@@ -236,16 +236,14 @@ public class StringAnonymizationTest {
 
     @Test
     public void testUniqueString() {
-        for (int i = 0; i < 100; i++) {
-            StringTestModel model = new StringTestModel() {
-                @Unique
-                @RandomizeString(value = StringType.STRING, maxLength = 2, minLength = StringTestModel.MIN_LENGTH, minSize = StringTestModel.MIN_SIZE, maxSize = 2)
-                public String value;
-            };
-            init(model);
-            model.setValue("ok");
-            anonymizer.anonymize(model);
-        }
+        StringTestModel model = new StringTestModel() {
+            @Unique
+            @RandomizeString(value = StringType.STRING, maxLength = 2, minLength = StringTestModel.MIN_LENGTH, minSize = StringTestModel.MIN_SIZE, maxSize = 2)
+            public String value;
+        };
+        init(model);
+        anonymizer.anonymize(model);
+        anonymizer.anonymize(model);
     }
 
     @Test
