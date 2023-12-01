@@ -108,7 +108,7 @@ public class NumberAnonymizationTest {
     @Test
     public void testUniqueNumber() {
          NumberTestModel model = new NumberTestModel() {
-            @RandomizeNumber(value = NumberType.INT, minValue = "1")
+            @RandomizeNumber(value = NumberType.INT, minValue = "1", isUnique = true)
             public Integer intValue;
         };
         anonymizer.anonymize(model);

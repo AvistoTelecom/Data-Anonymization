@@ -164,7 +164,7 @@ public class ObjectAnonymizer implements Randomizer {
         String StringField = clazz.getName() + '.' + field.getName();
         if (!StringMap.containsKey(StringField)) {
             StringMap.put(StringField, new HashSet<>());
-            StringMap.get(StringField).add(callGetterMethod(object, field).toString());
+            StringMap.get(StringField).add(newValue.toString());
             return newValue;
         }
         if (StringMap.get(StringField).add(newValue.toString())) {

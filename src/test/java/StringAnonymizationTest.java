@@ -236,7 +236,7 @@ public class StringAnonymizationTest {
     @Test
     public void testUniqueString() {
         StringTestModel model = new StringTestModel() {
-            @RandomizeString(value = StringType.STRING, maxLength = 2, minLength = StringTestModel.MIN_LENGTH, minSize = StringTestModel.MIN_SIZE, maxSize = 2)
+            @RandomizeString(value = StringType.STRING, maxLength = 2, minLength = StringTestModel.MIN_LENGTH, minSize = StringTestModel.MIN_SIZE, maxSize = 2, isUnique = true)
             public String value;
         };
         init(model);
