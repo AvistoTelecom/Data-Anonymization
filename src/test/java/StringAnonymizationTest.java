@@ -1,6 +1,9 @@
+import model.Model;
 import model.StringTestModel;
 import org.avisto.anonymization.annotation.RandomizeString;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
+import org.avisto.anonymization.exception.MethodGenerationException;
+import org.avisto.anonymization.exception.UniqueException;
 import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.StringType;
 import org.junit.jupiter.api.Assertions;
@@ -236,12 +239,13 @@ public class StringAnonymizationTest {
     @Test
     public void testUniqueString() {
         StringTestModel model = new StringTestModel() {
-            @RandomizeString(value = StringType.STRING, maxLength = 2, minLength = StringTestModel.MIN_LENGTH, minSize = StringTestModel.MIN_SIZE, maxSize = 2, isUnique = true)
+            @RandomizeString(value = StringType.REGEX, maxLength = 1, minLength = 1, isUnique = true, pattern = "[a-a]")
             public String value;
         };
         init(model);
         anonymizer.anonymize(model);
-        anonymizer.anonymize(model);
+        UniqueException e = Assertions.assertThrows(UniqueException.class, () -> anonymizer.anonymize(model));
+        Assertions.assertTrue(e.getMessage().contains("Can not anonymize this field who contain a unique key :"));
     }
 
     @Test

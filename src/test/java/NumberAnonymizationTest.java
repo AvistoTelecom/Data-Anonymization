@@ -1,6 +1,7 @@
 import model.NumberTestModel;
 import org.avisto.anonymization.annotation.RandomizeNumber;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
+import org.avisto.anonymization.exception.UniqueException;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.model.enums.NumberType;
 import org.junit.jupiter.api.Assertions;
@@ -112,7 +113,8 @@ public class NumberAnonymizationTest {
             public Integer intValue;
         };
         anonymizer.anonymize(model);
-        anonymizer.anonymize(model);
+        UniqueException e = Assertions.assertThrows(UniqueException.class, () -> anonymizer.anonymize(model));
+        Assertions.assertTrue(e.getMessage().contains("Can not anonymize this field who contain a unique key :"));
     }
 
     @Test
