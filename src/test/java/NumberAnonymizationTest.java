@@ -1,7 +1,5 @@
 import model.NumberTestModel;
-import model.StringTestModel;
 import org.avisto.anonymization.annotation.RandomizeNumber;
-import org.avisto.anonymization.annotation.Unique;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
 import org.avisto.anonymization.generator.NumberGenerator;
 import org.avisto.anonymization.model.enums.NumberType;
@@ -110,7 +108,6 @@ public class NumberAnonymizationTest {
     @Test
     public void testUniqueNumber() {
          NumberTestModel model = new NumberTestModel() {
-            @Unique
             @RandomizeNumber(value = NumberType.INT, minValue = "1")
             public Integer intValue;
         };

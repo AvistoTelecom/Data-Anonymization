@@ -1,6 +1,5 @@
 import model.StringTestModel;
 import org.avisto.anonymization.annotation.RandomizeString;
-import org.avisto.anonymization.annotation.Unique;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
 import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.StringType;
@@ -237,7 +236,6 @@ public class StringAnonymizationTest {
     @Test
     public void testUniqueString() {
         StringTestModel model = new StringTestModel() {
-            @Unique
             @RandomizeString(value = StringType.STRING, maxLength = 2, minLength = StringTestModel.MIN_LENGTH, minSize = StringTestModel.MIN_SIZE, maxSize = 2)
             public String value;
         };

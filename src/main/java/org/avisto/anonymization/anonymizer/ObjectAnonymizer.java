@@ -14,7 +14,6 @@ import org.avisto.anonymization.annotation.RandomizeFile;
 import org.avisto.anonymization.annotation.RandomizeNumber;
 import org.avisto.anonymization.annotation.RandomizeString;
 import org.avisto.anonymization.annotation.SelfImplementation;
-import org.avisto.anonymization.annotation.Unique;
 import org.avisto.anonymization.exception.AnonymeException;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.MethodGenerationException;
