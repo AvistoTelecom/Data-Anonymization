@@ -460,14 +460,15 @@ Values:
         <i>Parameters</i>
     </summary>
 
-|          name | type       | is optional | default   | description                                |
-|--------------:|------------|-------------|-----------|--------------------------------------------|
-|         value | NumberType | false       | none      | behavior                                   |
-|      minValue | String     | true        | "default" | min value                                  |
-|      maxValue | String     | true        | "default" | max value                                  |
-|       minSize | int        | true        | 1         | min size of the collection                 |
-|       maxSize | int        | true        | 15        | max size of the collection                 |
-| randomizeNull | boolean    | true        | false     | specify if null field should be anonymized |
+|            name | type       | is optional | default   | description                                |
+|----------------:|------------|-------------|-----------|--------------------------------------------|
+|           value | NumberType | false       | none      | behavior                                   |
+|        minValue | String     | true        | "default" | min value                                  |
+|        maxValue | String     | true        | "default" | max value                                  |
+|         minSize | int        | true        | 1         | min size of the collection                 |
+|         maxSize | int        | true        | 15        | max size of the collection                 |
+|        isUnique | boolean    | true        | false     | specify if a field as a unique key         |
+|   randomizeNull | boolean    | true        | false     | specify if null field should be anonymized |
 
 The default min (alt. max) value is the minimal (alt. maximal) value possible depending on the NumberType.
 
@@ -482,12 +483,12 @@ minSize and maxSize are used only if the field is a collection.
         <i>Parameters usage by NumberType value</i>
     </summary>
 
-|   value | parameters                                           | description     |
-|--------:|------------------------------------------------------|-----------------|
-|    LONG | minValue, maxValue, minSize, maxSize, randomizeNull  | generate long   |
-|     INT | minValue, maxValue, minSize, maxSize, randomizeNull  | generate int    |
-|   FLOAT | minValue, maxValue, minSize, maxSize, randomizeNull  | generate float  |
-|  DOUBLE | minValue, maxValue, minSize, maxSize, randomizeNull  | generate double |
+|   value | parameters                                                    | description     |
+|--------:|---------------------------------------------------------------|-----------------|
+|    LONG | minValue, maxValue, minSize, maxSize, isUnique, randomizeNull | generate long   |
+|     INT | minValue, maxValue, minSize, maxSize, isUnique, randomizeNull | generate int    |
+|   FLOAT | minValue, maxValue, minSize, maxSize, isUnique, randomizeNull | generate float  |
+|  DOUBLE | minValue, maxValue, minSize, maxSize, isUnique, randomizeNull | generate double |
 
 </details>
 
@@ -508,6 +509,7 @@ minSize and maxSize are used only if the field is a collection.
 |        minSize | int             | true        | 1               | min size of the collection                 |
 |        maxSize | int             | true        | 10              | max size of the collection                 |
 |        pattern | String          | true        | "\[a-z\]{5,12}" | regex pattern                              |
+|       isUnique | boolean         | true        | false           | specify if a field as a unique key         |
 |  randomizeNull | boolean         | true        | false           | specify if null field should be anonymized |
 
 The default minLength (alt. maxLength) value is the minimal (alt. maximal) length possible depending on the StringType,
@@ -526,22 +528,22 @@ See supported regex pattern syntax [here](https://github.com/curious-odd-man/Rgx
         <i>Parameters usage by StringType value</i>
     </summary>
 
-|                  value | parameters                                            | description                                                                               |
-|-----------------------:|-------------------------------------------------------|-------------------------------------------------------------------------------------------|
-|                 STRING | minLength, maxLength, minSize, maxSize, randomizeNull | generate random string, the alphabet is \[a-z\]                                           |
-|                   TEXT | minLength, maxLength, minSize, maxSize, randomizeNull | generate "Lorem ipsum" text                                                               |
-|                  EMAIL | minSize, maxSize, randomizeNull                       | generate random email with format : %s.%s@%s.%s \*                                        |
-|                    URL | minSize, maxSize, randomizeNull                       | generate random url with format : \[https, http\]://%s/%s/%s \*                           |
-|    PHONE_INTERNATIONAL | minSize, maxSize, randomizeNull                       | generate international phone number                                                       |
-|               PHONE_FR | minSize, maxSize, randomizeNull                       | generate french national phone number                                                     |
-| SOCIAL_SECURITY_NUMBER | minSize, maxSize, randomizeNull                       | generate random social security number with format : \[0,1\]\[0-9\]{2}\[01-12\]\[0-9\]{8} |
-|          LICENSE_PLATE | minSize, maxSize, randomizeNull                       | generate license plate with format \[A-Z\]{2}-\[0-9\]{3}-\[A-Z\]{2}                       |
-|       STRING_FROM_FILE | path, minSize, maxSize, randomizeNull                 | select value from file                                                                    |
-|      STRING_FROM_ARRAY | possibleValues , minSize, maxSize, randomizeNull      | select value from array                                                                   |
-|                 NUMBER | minLength, maxLength, minSize, maxSize, randomizeNull | generate number as string                                                                 |
-|                  REGEX | pattern, minSize, maxSize, randomizeNull              | generate string which respects the pattern                                                |
-|                   IPV4 | minSize, maxSize, randomizeNull                       | generate string which respects IPV4 format                                                |
-|                   IPV6 | minSize, maxSize, randomizeNull                       | generate string which respects IPV6 format                                                |
+|                  value | parameters                                                      | description                                                                               |
+|-----------------------:|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+|                 STRING | minLength, maxLength, minSize, maxSize, isUnique, randomizeNull | generate random string, the alphabet is \[a-z\]                                           |
+|                   TEXT | minLength, maxLength, minSize, maxSize, isUnique, randomizeNull | generate "Lorem ipsum" text                                                               |
+|                  EMAIL | minSize, maxSize, isUnique, randomizeNull                       | generate random email with format : %s.%s@%s.%s \*                                        |
+|                    URL | minSize, maxSize, isUnique, randomizeNull                       | generate random url with format : \[https, http\]://%s/%s/%s \*                           |
+|    PHONE_INTERNATIONAL | minSize, maxSize, isUnique, randomizeNull                       | generate international phone number                                                       |
+|               PHONE_FR | minSize, maxSize, isUnique, randomizeNull                       | generate french national phone number                                                     |
+| SOCIAL_SECURITY_NUMBER | minSize, maxSize, isUnique, randomizeNull                       | generate random social security number with format : \[0,1\]\[0-9\]{2}\[01-12\]\[0-9\]{8} |
+|          LICENSE_PLATE | minSize, maxSize, isUnique, randomizeNull                       | generate license plate with format \[A-Z\]{2}-\[0-9\]{3}-\[A-Z\]{2}                       |
+|       STRING_FROM_FILE | path, minSize, maxSize, isUnique, randomizeNull                 | select value from file                                                                    |
+|      STRING_FROM_ARRAY | possibleValues , minSize, maxSize, isUnique, randomizeNull      | select value from array                                                                   |
+|                 NUMBER | minLength, maxLength, minSize, maxSize, isUnique, randomizeNull | generate number as string                                                                 |
+|                  REGEX | pattern, minSize, maxSize, isUnique, randomizeNull              | generate string which respects the pattern                                                |
+|                   IPV4 | minSize, maxSize, isUnique, randomizeNull                       | generate string which respects IPV4 format                                                |
+|                   IPV6 | minSize, maxSize, isUnique, randomizeNull                       | generate string which respects IPV6 format                                                |
 
  `*` Replace %s by a random string.
 
