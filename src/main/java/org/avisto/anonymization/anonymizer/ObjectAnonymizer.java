@@ -38,10 +38,10 @@ public class ObjectAnonymizer implements Randomizer {
 
     private RgxGen rgxGen;
 
-    private Map<String, Set<String>> UniqueStringMap;
+    private Map<String, Set<String>> uniqueStringMap;
 
     public ObjectAnonymizer() {
-        this.UniqueStringMap = new HashMap<>();
+        this.uniqueStringMap = new HashMap<>();
     }
 
     /**
@@ -160,23 +160,23 @@ public class ObjectAnonymizer implements Randomizer {
         }
     }
 
-    private <T> Object randomizeUnique(Field field, T object, Class<?> clazz, Supplier<T> supplier, int i,  Object newValue) {
-        String StringField = clazz.getName() + '.' + field.getName();
-        if (!UniqueStringMap.containsKey(StringField)) {
-            UniqueStringMap.put(StringField, new HashSet<>());
+    private <T> Object randomizeUnique(Field field, Class<?> clazz, Supplier<T> supplier, int i,  Object newValue) {
+        String stringField = clazz.getName() + '.' + field.getName();
+        if (!uniqueStringMap.containsKey(stringField)) {
+            uniqueStringMap.put(stringField, new HashSet<>());
         }
-        if (UniqueStringMap.get(StringField).add(newValue.toString())) {
+        if (uniqueStringMap.get(stringField).add(newValue.toString())) {
             return newValue;
         }
         if (i == 100) {
             throw new UniqueException(String.format("Can not anonymize this field who contain a unique key : %s : %s", field.getName(), clazz));
         }
-        randomizeUnique(field, object, clazz, supplier, i + 1, supplier.get());
+        randomizeUnique(field, clazz, supplier, i + 1, supplier.get());
         return newValue;
     }
 
     private <T> void setNewValue(T object , Field field, Supplier<T> supplier, int size, boolean isUnique, Class<?> clazz, boolean randomizeNull) {
-        Object newValue = isUnique ? randomizeUnique(field, object, clazz, supplier, 0, supplier.get()) : supplier.get();
+        Object newValue = isUnique ? randomizeUnique(field, clazz, supplier, 0, supplier.get()) : supplier.get();
         if (callGetterMethod(object, field) != null || randomizeNull) {
             if (!(Iterable.class.isAssignableFrom(field.getType()))) {
                 callSetterMethod(object, field, newValue);
@@ -186,7 +186,7 @@ public class ObjectAnonymizer implements Randomizer {
                 for (int i = 0; i < size; i++) {
                     newValue = supplier.get();
                     if (isUnique) {
-                        newValue = randomizeUnique(field, object, clazz, supplier, 0, newValue);
+                        newValue = randomizeUnique(field, clazz, supplier, 0, newValue);
                     }
                     res.add(newValue);
                 }
