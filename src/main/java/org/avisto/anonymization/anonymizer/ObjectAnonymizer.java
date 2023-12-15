@@ -160,23 +160,23 @@ public class ObjectAnonymizer implements Randomizer {
         }
     }
 
-    private <T> Object randomizeUnique(Field field, Class<?> clazz, Supplier<T> supplier, int i,  Object newValue) {
+    private <T> Object randomizeUnique(Field field, Class<?> clazz, Supplier<T> supplier, Object newValue) {
         String stringField = clazz.getName() + '.' + field.getName();
         if (!uniqueStringMap.containsKey(stringField)) {
             uniqueStringMap.put(stringField, new HashSet<>());
         }
-        if (uniqueStringMap.get(stringField).add(newValue.toString())) {
-            return newValue;
+        for (int i = 0; !uniqueStringMap.get(stringField).add(newValue.toString()); newValue = supplier.get()) {
+            if (i++ > 100) {
+                throw new UniqueException(
+                    String.format("Can not anonymize this field who contain a unique key : %s : %s",
+                        field.getName(), clazz));
+            }
         }
-        if (i == 100) {
-            throw new UniqueException(String.format("Can not anonymize this field who contain a unique key : %s : %s", field.getName(), clazz));
-        }
-        randomizeUnique(field, clazz, supplier, i + 1, supplier.get());
         return newValue;
     }
 
     private <T> void setNewValue(T object , Field field, Supplier<T> supplier, int size, boolean isUnique, Class<?> clazz, boolean randomizeNull) {
-        Object newValue = isUnique ? randomizeUnique(field, clazz, supplier, 0, supplier.get()) : supplier.get();
+        Object newValue = isUnique ? randomizeUnique(field, clazz, supplier, supplier.get()) : supplier.get();
         if (callGetterMethod(object, field) != null || randomizeNull) {
             if (!(Iterable.class.isAssignableFrom(field.getType()))) {
                 callSetterMethod(object, field, newValue);
@@ -186,7 +186,7 @@ public class ObjectAnonymizer implements Randomizer {
                 for (int i = 0; i < size; i++) {
                     newValue = supplier.get();
                     if (isUnique) {
-                        newValue = randomizeUnique(field, clazz, supplier, 0, newValue);
+                        newValue = randomizeUnique(field, clazz, supplier, newValue);
                     }
                     res.add(newValue);
                 }

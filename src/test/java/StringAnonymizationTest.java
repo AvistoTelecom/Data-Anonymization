@@ -1,8 +1,6 @@
-import model.Model;
 import model.StringTestModel;
 import org.avisto.anonymization.annotation.RandomizeString;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
-import org.avisto.anonymization.exception.MethodGenerationException;
 import org.avisto.anonymization.exception.UniqueException;
 import org.avisto.anonymization.generator.StringGenerator;
 import org.avisto.anonymization.model.enums.StringType;
@@ -238,6 +236,19 @@ public class StringAnonymizationTest {
 
     @Test
     public void testUniqueString() {
+        StringTestModel model = new StringTestModel() {
+            @RandomizeString(value = StringType.REGEX, maxLength = 1, minLength = 1, isUnique = true, pattern = "[a-b]")
+            public String value;
+        };
+        init(model);
+        anonymizer.anonymize(model);
+        String firstValue = model.getValue();
+        anonymizer.anonymize(model);
+        Assertions.assertNotEquals(model.getValue(), firstValue);
+    }
+
+    @Test
+    public void testUniqueStringFail() {
         StringTestModel model = new StringTestModel() {
             @RandomizeString(value = StringType.REGEX, maxLength = 1, minLength = 1, isUnique = true, pattern = "[a-a]")
             public String value;

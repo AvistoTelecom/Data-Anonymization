@@ -109,9 +109,23 @@ public class NumberAnonymizationTest {
     @Test
     public void testUniqueNumber() {
          NumberTestModel model = new NumberTestModel() {
-            @RandomizeNumber(value = NumberType.INT, minValue = "1", isUnique = true)
+            @RandomizeNumber(value = NumberType.INT, minValue = "1", maxValue = "3", isUnique = true)
             public Integer intValue;
         };
+        model.setIntValue(1);
+        anonymizer.anonymize(model);
+        Integer firstValue = model.getIntValue();
+        anonymizer.anonymize(model);
+        Assertions.assertNotEquals(model.getIntValue(), firstValue);
+    }
+
+    @Test
+    public void testUniqueNumberFail() {
+        NumberTestModel model = new NumberTestModel() {
+            @RandomizeNumber(value = NumberType.INT, minValue = "1", maxValue = "2", isUnique = true)
+            public Integer intValue;
+        };
+        model.setIntValue(1);
         anonymizer.anonymize(model);
         UniqueException e = Assertions.assertThrows(UniqueException.class, () -> anonymizer.anonymize(model));
         Assertions.assertTrue(e.getMessage().contains("Can not anonymize this field who contain a unique key :"));
