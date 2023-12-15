@@ -1,6 +1,6 @@
 package org.avisto.anonymization.exception;
 
-public class BadUseAnnotationException extends IllegalArgumentException {
+public class BadUseAnnotationException extends GenericDataAnonymisationException {
     public BadUseAnnotationException(String message) {
         super(message);
     }

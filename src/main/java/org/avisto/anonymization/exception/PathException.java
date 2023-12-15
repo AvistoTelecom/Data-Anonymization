@@ -1,6 +1,6 @@
 package org.avisto.anonymization.exception;
 
-public class PathException extends FileException{
+public class PathException extends FileException {
 
     public PathException(String message) {
         super(message);

@@ -1,6 +1,6 @@
 package org.avisto.anonymization.exception;
 
-public class HandleExtensionException extends FileException{
+public class HandleExtensionException extends FileException {
 
     public HandleExtensionException(String message) {
         super(message);

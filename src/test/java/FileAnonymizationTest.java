@@ -4,6 +4,7 @@
 
 import model.Model;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
+import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.FileException;
 import org.avisto.anonymization.exception.HandleExtensionException;
 import org.avisto.anonymization.exception.PathException;
@@ -25,12 +26,24 @@ public class FileAnonymizationTest {
     private final String directory = "src/test/resources/file/new/";
 
     @BeforeEach
+    public void createNewDir() {
+        File dir = new File("src/test/resources/file/new/");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+    }
+
     @AfterEach
     public void cleanUpFiles() {
         File directory = new File("src/test/resources/file/new/");
-        for(File file: Objects.requireNonNull(directory.listFiles()))
-            if (!file.isDirectory())
+        for(File file: Objects.requireNonNull(directory.listFiles())) {
+            if (!file.isDirectory()) {
                 file.delete();
+            }
+        }
+        if (directory.exists()) {
+            directory.delete();
+        }
     }
 
     @Test
@@ -39,8 +52,6 @@ public class FileAnonymizationTest {
         Assertions.assertEquals("", FileGenerator.getExtension("file"));
 
     }
-
-
 
     @Test
     public void testDeleteFile() throws IOException {
@@ -118,11 +129,11 @@ public class FileAnonymizationTest {
         Assertions.assertTrue(file.exists());
 
         PathException e = Assertions.assertThrows(PathException.class,
-                () -> FileGenerator.generateFile("wrong/path/", "src/test/resources/file/new/file.txt"));
+            () -> FileGenerator.generateFile("wrong/path/", "src/test/resources/file/new/file.txt"));
         Assertions.assertEquals("unknown path", e.getMessage());
 
         e = Assertions.assertThrows(PathException.class,
-                () -> FileGenerator.generateFile("src/test/resources/file/base/", "wrong/path/file.txt"));
+            () -> FileGenerator.generateFile("src/test/resources/file/base/", "wrong/path/file.txt"));
         Assertions.assertEquals("unknown path", e.getMessage());
     }
 
@@ -135,7 +146,7 @@ public class FileAnonymizationTest {
     @Test
     public void testGenerateByteFromExtNotHandled() {
         HandleExtensionException e = Assertions.assertThrows(HandleExtensionException.class,
-                () -> FileGenerator.generateFileAsBytes("notHandle"));
+            () -> FileGenerator.generateFileAsBytes("notHandle"));
         Assertions.assertEquals("extension not handled", e.getMessage());
     }
 
@@ -148,7 +159,7 @@ public class FileAnonymizationTest {
     @Test
     public void testGenerateByteFromWithDirExtNotHandled() {
         PathException e = Assertions.assertThrows(PathException.class,
-                () -> FileGenerator.generateFileAsBytes("src/test/resources/file/base/", "notHandle"));
+            () -> FileGenerator.generateFileAsBytes("src/test/resources/file/base/", "notHandle"));
         Assertions.assertEquals("Unable to find the file", e.getMessage());
     }
 }

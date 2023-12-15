@@ -67,13 +67,13 @@ public class ObjectAnonymizerTest {
     public void testInaccessibleMethod() {
         Model.ModelWithInaccessibleMethod model = new Model.ModelWithInaccessibleMethod();
         BadUseAnnotationException e = Assertions.assertThrows(BadUseAnnotationException.class, () -> anonymizer.anonymize(model));
-        Assertions.assertEquals("org.avisto.anonymization.exception.BadUseAnnotationException: Method doThing on class class model.Model$ModelWithInaccessibleMethod couldn't be called", e.getMessage());
+        Assertions.assertEquals("Method doThing on class class model.Model$ModelWithInaccessibleMethod couldn't be called", e.getMessage());
     }
 
     @Test
     public void testParamMethod() {
         Model.ModelWithInaccessibleMethod model = new Model.ModelWithInaccessibleMethod();
         BadUseAnnotationException e = Assertions.assertThrows(BadUseAnnotationException.class, () -> anonymizer.anonymize(model));
-        Assertions.assertEquals("org.avisto.anonymization.exception.BadUseAnnotationException: Method doThing on class class model.Model$ModelWithInaccessibleMethod couldn't be called", e.getMessage());
+        Assertions.assertEquals("Method doThing on class class model.Model$ModelWithInaccessibleMethod couldn't be called", e.getMessage());
     }
 }

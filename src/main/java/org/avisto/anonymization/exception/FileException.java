@@ -1,6 +1,6 @@
 package org.avisto.anonymization.exception;
 
-public class FileException extends RuntimeException{
+public class FileException extends GenericDataAnonymisationException {
     public FileException(String message) {
         super(message);
     }
