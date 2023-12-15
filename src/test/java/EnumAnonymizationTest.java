@@ -3,6 +3,7 @@
  */
 
 import model.EnumModel;
+import org.avisto.anonymization.annotation.RandomizeEnum;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.model.enums.NumberType;
@@ -26,5 +27,16 @@ public class EnumAnonymizationTest {
         EnumModel.EnumWellFormated model = new EnumModel.EnumWellFormated();
         anonymizer.anonymize(model);
         Assertions.assertTrue(Arrays.stream(NumberType.values()).anyMatch( enumValue -> model.value.equals(enumValue) ));
+    }
+
+    @Test
+    public void testEnumRandomizeNull() {
+        EnumModel.EnumWellFormated model = new EnumModel.EnumWellFormated() {
+            @RandomizeEnum(randomizeNull = true)
+            public NumberType value;
+        };
+        model.setValue(null);
+        anonymizer.anonymize(model);
+        Assertions.assertNotNull(model.getValue());
     }
 }

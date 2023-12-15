@@ -147,8 +147,8 @@ public class ObjectAnonymizer implements Randomizer {
         }
     }
 
-    private <T> void setNewValue(T object , Field field, Supplier<T> supplier, int size) {
-        if (callGetterMethod(object, field) != null) {
+    private <T> void setNewValue(T object , Field field, Supplier<T> supplier, int size, boolean randomizeNull) {
+        if (callGetterMethod(object, field) != null || randomizeNull) {
             if (!(Iterable.class.isAssignableFrom(field.getType()))) {
                 callSetterMethod(object, field, supplier.get());
             } else if (Collection.class.isAssignableFrom(field.getType())) {
@@ -177,25 +177,30 @@ public class ObjectAnonymizer implements Randomizer {
                 setNewValue(object,
                         field,
                         () -> numberBehavior(annotation),
-                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
+                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                        annotation.randomizeNull());
             } else if (field.isAnnotationPresent(RandomizeString.class)) {
                 RandomizeString annotation = field.getAnnotation(RandomizeString.class);
                 setNewValue(object,
                         field,
                         () -> stringBehavior(annotation),
-                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
+                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                        annotation.randomizeNull());
             } else if (field.isAnnotationPresent(RandomizeFile.class)) {
                  RandomizeFile annotation = field.getAnnotation(RandomizeFile.class);
                  setNewValue(object,
-                         field,
-                         () -> fileBehavior(annotation, object, field),
-                         NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()));
+                        field,
+                        () -> fileBehavior(annotation, object, field),
+                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                        false);
 
             } else if (field.isAnnotationPresent(RandomizeEnum.class)) {
-            setNewValue(object,
-                    field,
-                    () -> enumBehavior(field),
-                    0);
+                RandomizeEnum annotation = field.getAnnotation(RandomizeEnum.class);
+                setNewValue(object,
+                        field,
+                        () -> enumBehavior(field),
+                        0,
+                        annotation.randomizeNull());
             }
         }
         for (Method method : clazz.getDeclaredMethods()) {

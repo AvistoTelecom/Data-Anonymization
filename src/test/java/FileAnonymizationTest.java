@@ -4,7 +4,6 @@
 
 import model.Model;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
-import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.FileException;
 import org.avisto.anonymization.exception.HandleExtensionException;
 import org.avisto.anonymization.exception.PathException;
@@ -23,11 +22,13 @@ import java.util.Objects;
 
 public class FileAnonymizationTest {
 
-    private final String directory = "src/test/resources/file/new/";
+    private static final String DIRECTORY = "src/test/resources/file/new/";
+    private static final String FILE = "file.txt";
+    private static final String NEWFILE = "newFile.txt";
 
     @BeforeEach
     public void createNewDir() {
-        File dir = new File("src/test/resources/file/new/");
+        File dir = new File(DIRECTORY);
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -35,20 +36,20 @@ public class FileAnonymizationTest {
 
     @AfterEach
     public void cleanUpFiles() {
-        File directory = new File("src/test/resources/file/new/");
-        for(File file: Objects.requireNonNull(directory.listFiles())) {
-            if (!file.isDirectory()) {
-                file.delete();
+        File directory = new File(DIRECTORY);
+        if (directory.exists() && directory.isDirectory()) {
+            for(File file: Objects.requireNonNull(directory.listFiles())) {
+                if (!file.isDirectory()) {
+                    file.delete();
+                }
             }
-        }
-        if (directory.exists()) {
             directory.delete();
         }
     }
 
     @Test
     public void testGetExtension() {
-        Assertions.assertEquals("txt", FileGenerator.getExtension("file.txt"));
+        Assertions.assertEquals("txt", FileGenerator.getExtension(FILE));
         Assertions.assertEquals("", FileGenerator.getExtension("file"));
 
     }
@@ -56,21 +57,21 @@ public class FileAnonymizationTest {
     @Test
     public void testDeleteFile() throws IOException {
         String fileName = "testFile.txt";
-        Path newFilePath = Paths.get(directory + fileName);
+        Path newFilePath = Paths.get(DIRECTORY + fileName);
         Files.createFile(newFilePath);
 
-        Assertions.assertTrue(FileGenerator.deleteFile(directory + fileName));
-        Assertions.assertFalse(FileGenerator.deleteFile(directory + fileName));
+        Assertions.assertTrue(FileGenerator.deleteFile(DIRECTORY + fileName));
+        Assertions.assertFalse(FileGenerator.deleteFile(DIRECTORY + fileName));
     }
 
     @Test
     public void testGenerateFile() throws FileException {
-        String newFile = FileGenerator.generateFile(directory, "file", "txt");
-        Assertions.assertEquals("src/test/resources/file/new/file.txt", newFile);
-        File file = new File("src/test/resources/file/new/file.txt");
+        String newFile = FileGenerator.generateFile(DIRECTORY, "file", "txt");
+        Assertions.assertEquals(DIRECTORY + FILE, newFile);
+        File file = new File(DIRECTORY + FILE);
         Assertions.assertTrue(file.exists());
 
-        FileException e = Assertions.assertThrows(HandleExtensionException.class, () -> FileGenerator.generateFile(directory, "file", "notHandle"));
+        FileException e = Assertions.assertThrows(HandleExtensionException.class, () -> FileGenerator.generateFile(DIRECTORY, "file", "notHandle"));
         Assertions.assertEquals("extension not handled", e.getMessage());
 
         e = Assertions.assertThrows(PathException.class, () -> FileGenerator.generateFile("no/directory/there", "file", "txt"));
@@ -79,57 +80,57 @@ public class FileAnonymizationTest {
 
     @Test
     public void testAnnotation() throws IOException {
-        Path newFilePath = Paths.get("src/test/resources/file/new/file.txt");
+        Path newFilePath = Paths.get(DIRECTORY + FILE);
         Files.createFile(newFilePath);
         Model.ModelWithFile model = new Model.ModelWithFile();
         ObjectAnonymizer anonymizer = new ObjectAnonymizer();
         anonymizer.anonymize(model);
 
-        Assertions.assertEquals("src/test/resources/file/new/newFile.txt", model.getValue());
+        Assertions.assertEquals(DIRECTORY + NEWFILE, model.getValue());
 
-        File file = new File("src/test/resources/file/new/newFile.txt");
+        File file = new File(DIRECTORY + NEWFILE);
         Assertions.assertTrue(file.exists());
 
-        file = new File("src/test/resources/file/new/file.txt");
+        file = new File(DIRECTORY + FILE);
         Assertions.assertFalse(file.exists());
     }
 
     @Test
     public void testAnnotationWithFalseRemoval() throws IOException {
-        Path newFilePath = Paths.get("src/test/resources/file/new/file.txt");
+        Path newFilePath = Paths.get(DIRECTORY + FILE);
         Files.createFile(newFilePath);
         Model.ModelWithOldFileRemove model = new Model.ModelWithOldFileRemove();
         ObjectAnonymizer anonymizer = new ObjectAnonymizer();
         anonymizer.anonymize(model);
 
-        Assertions.assertEquals("src/test/resources/file/new/newFile.txt", model.getValue());
+        Assertions.assertEquals(DIRECTORY + NEWFILE, model.getValue());
 
-        File file = new File("src/test/resources/file/new/file.txt");
+        File file = new File(DIRECTORY + FILE);
         Assertions.assertTrue(file.exists());
 
-        file = new File("src/test/resources/file/new/newFile.txt");
+        file = new File(DIRECTORY + NEWFILE);
         Assertions.assertTrue(file.exists());
     }
 
     @Test
     public void testConvert() {
-        FileGenerator.generateFile("src/test/resources/file/new/file.htm");
-        File file = new File("src/test/resources/file/new/file.htm");
+        FileGenerator.generateFile(DIRECTORY + "file.htm");
+        File file = new File(DIRECTORY + "file.htm");
         Assertions.assertTrue(file.exists());
 
-        FileGenerator.generateFile("src/test/resources/file/new/file.jpeg");
-        file = new File("src/test/resources/file/new/file.jpeg");
+        FileGenerator.generateFile(DIRECTORY + "file.jpeg");
+        file = new File(DIRECTORY + "file.jpeg");
         Assertions.assertTrue(file.exists());
     }
 
     @Test
     public void testGenerateFileFromOrigin() {
-        FileGenerator.generateFile("src/test/resources/file/base/", "src/test/resources/file/new/file.txt");
-        File file = new File("src/test/resources/file/new/file.txt");
+        FileGenerator.generateFile("src/test/resources/file/base/", DIRECTORY + FILE);
+        File file = new File(DIRECTORY + FILE);
         Assertions.assertTrue(file.exists());
 
         PathException e = Assertions.assertThrows(PathException.class,
-            () -> FileGenerator.generateFile("wrong/path/", "src/test/resources/file/new/file.txt"));
+            () -> FileGenerator.generateFile("wrong/path/", DIRECTORY + FILE));
         Assertions.assertEquals("unknown path", e.getMessage());
 
         e = Assertions.assertThrows(PathException.class,
