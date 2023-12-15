@@ -1,6 +1,8 @@
 import model.NumberTestModel;
+import org.avisto.anonymization.annotation.RandomizeNumber;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
 import org.avisto.anonymization.generator.NumberGenerator;
+import org.avisto.anonymization.model.enums.NumberType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -101,5 +103,16 @@ public class NumberAnonymizationTest {
 
         IllegalArgumentException doubleException = Assertions.assertThrows(IllegalArgumentException.class, () -> NumberGenerator.generateDouble(5d, 3d));
         Assertions.assertEquals(minGreaterThanMaxErrorMessage, doubleException.getMessage());
+    }
+
+    @Test
+    public void testNumberRandomizeNull() {
+        NumberTestModel model = new NumberTestModel() {
+            @RandomizeNumber(value = NumberType.INT, randomizeNull = true)
+            public Integer intValue;
+        };
+        model.setIntValue(null);
+        anonymizer.anonymize(model);
+        Assertions.assertNotNull(model.getIntValue());
     }
 }

@@ -232,4 +232,15 @@ public class StringAnonymizationTest {
         String n = StringGenerator.generateFromRegex("[a-z]{2,3}[0-9]{10}");
         Assertions.assertTrue(Pattern.matches("[a-z]{2,3}[0-9]{10}", n));
     }
+
+    @Test
+    public void testStringRandomizeNull() {
+        StringTestModel model = new StringTestModel(){
+            @RandomizeString(value = StringType.STRING, randomizeNull = true)
+            public String value;
+        };
+        model.setValue(null);
+        anonymizer.anonymize(model);
+        Assertions.assertNotNull(model.getValue());
+    }
 }

@@ -10,4 +10,9 @@ import java.lang.annotation.ElementType;
 @Target(ElementType.FIELD)
 @Inherited
 public @interface RandomizeEnum {
+    /**
+     * specify if a null field should be anonymized
+     * @return value
+     */
+    boolean randomizeNull() default false;
 }

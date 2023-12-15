@@ -45,4 +45,10 @@ public @interface RandomizeNumber {
      * @return value
      */
     int maxSize() default NumberGenerator.MAX_SIZE_COLLECTION;
+
+    /**
+     * specify if a null field should be anonymized
+     * @return value
+     */
+    boolean randomizeNull() default false;
 }
