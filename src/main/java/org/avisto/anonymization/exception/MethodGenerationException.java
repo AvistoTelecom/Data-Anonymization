@@ -1,6 +1,6 @@
 package org.avisto.anonymization.exception;
 
-public class MethodGenerationException extends RuntimeException{
+public class MethodGenerationException extends GenericDataAnonymisationException {
     public MethodGenerationException(String message, Exception e){
         super(message, e);
     }

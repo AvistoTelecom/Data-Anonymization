@@ -18,7 +18,7 @@ public class EnumAnonymizationTest {
     public void enumWrongTypeTest() {
         EnumModel.EnumWrongType model = new EnumModel.EnumWrongType();
         BadUseAnnotationException e = Assertions.assertThrows(BadUseAnnotationException.class, () -> anonymizer.anonymize(model));
-        Assertions.assertEquals("org.avisto.anonymization.exception.BadUseAnnotationException: field should be enumeration", e.getMessage());
+        Assertions.assertEquals("field should be enumeration", e.getMessage());
     }
 
     @Test
