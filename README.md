@@ -747,6 +747,10 @@ It will get the extension expected on the pathToFile param.
 `generateFile( String pathToDirectory, String name, String extension )` => 
 Generate a file to the pathToDirectory with the name and extension given, based on blank file in resources in this library depending on the extension given.
 
+`generateFileAsInputStream( String extension )` =>
+It will return the InputStream corresponding to the file depending on the extension given.
+It will get a template file on resources from this library.
+
 `generateFileAsBytes( String extension )` =>
 It will return the byte array corresponding to the file depending on the extension given. 
 It will get a template file on resources from this library.

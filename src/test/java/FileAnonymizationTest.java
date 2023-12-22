@@ -2,6 +2,7 @@
  *
  */
 
+import java.io.InputStream;
 import model.Model;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
 import org.avisto.anonymization.exception.FileException;
@@ -162,5 +163,11 @@ public class FileAnonymizationTest {
         PathException e = Assertions.assertThrows(PathException.class,
             () -> FileGenerator.generateFileAsBytes("src/test/resources/file/base/", "notHandle"));
         Assertions.assertEquals("Unable to find the file", e.getMessage());
+    }
+
+    @Test
+    public void testGenerateFileAsInputStream() {
+        InputStream inputStream = FileGenerator.generateFileAsInputStream("txt");
+        Assertions.assertNotNull(inputStream);
     }
 }
