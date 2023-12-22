@@ -47,6 +47,13 @@ public @interface RandomizeNumber {
     int maxSize() default NumberGenerator.MAX_SIZE_COLLECTION;
 
     /**
+     * specify whether the field has a unique key
+     * @return value
+     */
+    boolean isUnique() default false;
+
+
+    /**
      * specify if a null field should be anonymized
      * @return value
      */

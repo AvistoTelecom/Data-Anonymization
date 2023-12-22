@@ -2,6 +2,12 @@ package org.avisto.anonymization.anonymizer;
 
 
 import com.github.curiousoddman.rgxgen.RgxGen;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.avisto.anonymization.annotation.Anonyme;
 import org.avisto.anonymization.annotation.RandomizeEnum;
 import org.avisto.anonymization.annotation.RandomizeFile;
@@ -11,6 +17,7 @@ import org.avisto.anonymization.annotation.SelfImplementation;
 import org.avisto.anonymization.exception.AnonymeException;
 import org.avisto.anonymization.exception.BadUseAnnotationException;
 import org.avisto.anonymization.exception.MethodGenerationException;
+import org.avisto.anonymization.exception.UniqueException;
 import org.avisto.anonymization.generator.FileGenerator;
 import org.avisto.anonymization.generator.Generator;
 import org.avisto.anonymization.generator.NumberGenerator;
@@ -30,6 +37,12 @@ import java.util.function.Supplier;
 public class ObjectAnonymizer implements Randomizer {
 
     private RgxGen rgxGen;
+
+    private Map<String, Set<String>> uniqueStringMap;
+
+    public ObjectAnonymizer() {
+        this.uniqueStringMap = new HashMap<>();
+    }
 
     /**
      * anonymize the object given.
@@ -147,16 +160,39 @@ public class ObjectAnonymizer implements Randomizer {
         }
     }
 
-    private <T> void setNewValue(T object , Field field, Supplier<T> supplier, int size, boolean randomizeNull) {
+    private <T> Object randomizeUnique(Field field, Class<?> clazz, Supplier<T> supplier, Object newValue) {
+        String stringField = clazz.getName() + '.' + field.getName();
+        if (!uniqueStringMap.containsKey(stringField)) {
+            uniqueStringMap.put(stringField, new HashSet<>());
+        }
+        for (int i = 0; !uniqueStringMap.get(stringField).add(newValue.toString()); newValue = supplier.get()) {
+            if (i++ > 100) {
+                throw new UniqueException(
+                    String.format("Can not anonymize this field who contain a unique key : %s : %s",
+                        field.getName(), clazz));
+            }
+        }
+        return newValue;
+    }
+
+    private <T> void setNewValue(T object , Field field, Supplier<T> supplier, int size, boolean isUnique, Class<?> clazz, boolean randomizeNull) {
+        Object newValue = isUnique ? randomizeUnique(field, clazz, supplier, supplier.get()) : supplier.get();
         if (callGetterMethod(object, field) != null || randomizeNull) {
             if (!(Iterable.class.isAssignableFrom(field.getType()))) {
-                callSetterMethod(object, field, supplier.get());
+                callSetterMethod(object, field, newValue);
             } else if (Collection.class.isAssignableFrom(field.getType())) {
-                Collection<T> res = callGetterMethod(object, field);
+                Collection<Object> res = callGetterMethod(object, field);
+                res.clear();
                 for (int i = 0; i < size; i++) {
-                    res.add(supplier.get());
+                    newValue = supplier.get();
+                    if (isUnique) {
+                        newValue = randomizeUnique(field, clazz, supplier, newValue);
+                    }
+                    res.add(newValue);
                 }
-            } else throw new BadUseAnnotationException("Type not supported yet");
+            } else {
+                throw new BadUseAnnotationException("Type not supported yet");
+            }
         }
     }
 
@@ -175,32 +211,39 @@ public class ObjectAnonymizer implements Randomizer {
             if (field.isAnnotationPresent(RandomizeNumber.class)) {
                 RandomizeNumber annotation = field.getAnnotation(RandomizeNumber.class);
                 setNewValue(object,
-                        field,
-                        () -> numberBehavior(annotation),
-                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
-                        annotation.randomizeNull());
+                    field,
+                    () -> numberBehavior(annotation),
+                    NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                    annotation.isUnique(),
+                    clazz,
+                    annotation.randomizeNull());
             } else if (field.isAnnotationPresent(RandomizeString.class)) {
                 RandomizeString annotation = field.getAnnotation(RandomizeString.class);
                 setNewValue(object,
-                        field,
-                        () -> stringBehavior(annotation),
-                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
-                        annotation.randomizeNull());
+                    field,
+                    () -> stringBehavior(annotation),
+                    NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                    annotation.isUnique(),
+                    clazz,
+                    annotation.randomizeNull());
             } else if (field.isAnnotationPresent(RandomizeFile.class)) {
-                 RandomizeFile annotation = field.getAnnotation(RandomizeFile.class);
-                 setNewValue(object,
-                        field,
-                        () -> fileBehavior(annotation, object, field),
-                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
-                        false);
-
+                RandomizeFile annotation = field.getAnnotation(RandomizeFile.class);
+                setNewValue(object,
+                    field,
+                    () -> fileBehavior(annotation, object, field),
+                    NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                    false,
+                    clazz,
+                    false);
             } else if (field.isAnnotationPresent(RandomizeEnum.class)) {
                 RandomizeEnum annotation = field.getAnnotation(RandomizeEnum.class);
                 setNewValue(object,
-                        field,
-                        () -> enumBehavior(field),
-                        0,
-                        annotation.randomizeNull());
+                    field,
+                    () -> enumBehavior(field),
+                    0,
+                    false,
+                    clazz,
+                    annotation.randomizeNull());
             }
         }
         for (Method method : clazz.getDeclaredMethods()) {
