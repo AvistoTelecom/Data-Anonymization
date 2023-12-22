@@ -207,7 +207,6 @@ public class ObjectAnonymizer implements Randomizer {
     @Override
     public <T> void randomize(T object) {
         for (Class<?> clazz = object.getClass(); clazz != null; clazz = clazz.getSuperclass()) {
-            System.out.println("Clazz name : " + clazz.getName());
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(RandomizeNumber.class)) {
                     RandomizeNumber annotation = field.getAnnotation(RandomizeNumber.class);
