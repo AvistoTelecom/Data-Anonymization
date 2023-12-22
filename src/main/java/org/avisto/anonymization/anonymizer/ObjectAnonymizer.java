@@ -206,49 +206,51 @@ public class ObjectAnonymizer implements Randomizer {
 
     @Override
     public <T> void randomize(T object) {
-        Class<?> clazz = object.getClass();
-        for (Field field : clazz.getDeclaredFields()) {
-            if (field.isAnnotationPresent(RandomizeNumber.class)) {
-                RandomizeNumber annotation = field.getAnnotation(RandomizeNumber.class);
-                setNewValue(object,
-                    field,
-                    () -> numberBehavior(annotation),
-                    NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
-                    annotation.isUnique(),
-                    clazz,
-                    annotation.randomizeNull());
-            } else if (field.isAnnotationPresent(RandomizeString.class)) {
-                RandomizeString annotation = field.getAnnotation(RandomizeString.class);
-                setNewValue(object,
-                    field,
-                    () -> stringBehavior(annotation),
-                    NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
-                    annotation.isUnique(),
-                    clazz,
-                    annotation.randomizeNull());
-            } else if (field.isAnnotationPresent(RandomizeFile.class)) {
-                RandomizeFile annotation = field.getAnnotation(RandomizeFile.class);
-                setNewValue(object,
-                    field,
-                    () -> fileBehavior(annotation, object, field),
-                    NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
-                    false,
-                    clazz,
-                    false);
-            } else if (field.isAnnotationPresent(RandomizeEnum.class)) {
-                RandomizeEnum annotation = field.getAnnotation(RandomizeEnum.class);
-                setNewValue(object,
-                    field,
-                    () -> enumBehavior(field),
-                    0,
-                    false,
-                    clazz,
-                    annotation.randomizeNull());
+        for (Class<?> clazz = object.getClass(); clazz != null; clazz = clazz.getSuperclass()) {
+            System.out.println("Clazz name : " + clazz.getName());
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.isAnnotationPresent(RandomizeNumber.class)) {
+                    RandomizeNumber annotation = field.getAnnotation(RandomizeNumber.class);
+                    setNewValue(object,
+                        field,
+                        () -> numberBehavior(annotation),
+                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                        annotation.isUnique(),
+                        clazz,
+                        annotation.randomizeNull());
+                } else if (field.isAnnotationPresent(RandomizeString.class)) {
+                    RandomizeString annotation = field.getAnnotation(RandomizeString.class);
+                    setNewValue(object,
+                        field,
+                        () -> stringBehavior(annotation),
+                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                        annotation.isUnique(),
+                        clazz,
+                        annotation.randomizeNull());
+                } else if (field.isAnnotationPresent(RandomizeFile.class)) {
+                    RandomizeFile annotation = field.getAnnotation(RandomizeFile.class);
+                    setNewValue(object,
+                        field,
+                        () -> fileBehavior(annotation, object, field),
+                        NumberGenerator.generateInt(annotation.minSize(), annotation.maxSize()),
+                        false,
+                        clazz,
+                        false);
+                } else if (field.isAnnotationPresent(RandomizeEnum.class)) {
+                    RandomizeEnum annotation = field.getAnnotation(RandomizeEnum.class);
+                    setNewValue(object,
+                        field,
+                        () -> enumBehavior(field),
+                        0,
+                        false,
+                        clazz,
+                        annotation.randomizeNull());
+                }
             }
-        }
-        for (Method method : clazz.getDeclaredMethods()) {
-            if (method.isAnnotationPresent(SelfImplementation.class)) {
-                callMethod(object, method);
+            for (Method method : clazz.getDeclaredMethods()) {
+                if (method.isAnnotationPresent(SelfImplementation.class)) {
+                    callMethod(object, method);
+                }
             }
         }
     }

@@ -14,8 +14,6 @@ public class NumberTestModel {
     public static final int MIN_SIZE = 3;
     public static final int MAX_SIZE = 6;
 
-
-    @RandomizeNumber(value = NumberType.INT, minValue = STRING_MIN_VALUE, maxValue = STRING_MAX_VALUE)
     public Integer intValue;
     @RandomizeNumber(value = NumberType.LONG, minValue = STRING_MIN_VALUE, maxValue = STRING_MAX_VALUE)
     public Long longValue;

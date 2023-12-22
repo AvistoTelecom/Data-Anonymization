@@ -1,4 +1,5 @@
 import model.StringTestModel;
+import org.avisto.anonymization.annotation.Anonyme;
 import org.avisto.anonymization.annotation.RandomizeString;
 import org.avisto.anonymization.anonymizer.ObjectAnonymizer;
 import org.avisto.anonymization.exception.UniqueException;
@@ -269,4 +270,31 @@ public class StringAnonymizationTest {
         anonymizer.anonymize(model);
         Assertions.assertNotNull(model.getValue());
     }
+
+    @Anonyme
+    public static class A {
+        @RandomizeString(value = StringType.STRING)
+        protected String a = "clear";
+
+        public String getA() { return a; }
+        public void setA(String a) { this.a = a; }
+    }
+
+    @Anonyme
+    public static class B extends A {
+        @RandomizeString(value = StringType.STRING)
+        private String b = "clear";
+        public String getB() { return b; }
+        public void setB(String b) { this.b = b; }
+    }
+
+    @Test
+    public void testAnonymiseParent() {
+        ObjectAnonymizer oa = new ObjectAnonymizer();
+        B b = new B();
+        oa.anonymize(b);
+        Assertions.assertNotEquals(b.getB(), "clear");
+        Assertions.assertNotEquals(b.getA(), "clear");
+    }
+
 }
