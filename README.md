@@ -759,6 +759,51 @@ It will get a template file on the originDirectory given, the template must matc
 
 </details>
 
+You can also generate value by creating a class with annotated field with RandomizeNull parameter.
+
+<details>
+    <summary>
+        <i>Example of generation from an uninitialized class</i>
+    </summary>
+
+````java
+@Anonyme
+public class Person {
+
+    @RandomizeString(value = StringType.STRING, randomizeNull = true)
+    private String firstName;
+
+    @RandomizeString(value = StringType.STRING, randomizeNull = true)
+    private String lastName;
+
+    @RandomizeString(value = StringType.EMAIL, randomizeNull = true)
+    private String email;
+
+    @RandomizeString(value = StringType.NUMBER, randomizeNull = true)
+    private String number;
+    /*  Getter and Setter necessary */
+    /* Constructor */
+}
+````
+
+````java
+public class Main {
+    public static void main(String[] args) {
+        Person p = new Person();  // create a new Person
+        ObjectAnonymizer oa = new ObjectAnonymizer();  // instance of objectAnonymizer 
+        oa.anonymize(p);  // apply anonymization to p
+    }
+}
+````
+
+    Output:
+    Before ObjectAnonymizer:
+    p -> { firstName : null, lastName : null, email : null, number : null}
+    After ObjectAnonymizer:
+    p -> { firstName : adispmd, lastName : zqsahr, email : azrfsq.gfzeryda@gyfdg.ftd, number : 791310314}
+
+</details>
+
 ## Limitations
 
 **Table of all handled types**
