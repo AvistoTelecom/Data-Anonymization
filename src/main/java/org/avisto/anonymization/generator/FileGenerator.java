@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
-public final class FileGenerator implements Generator{
+public final class FileGenerator implements Generator {
 
 
     /**
@@ -66,6 +66,20 @@ public final class FileGenerator implements Generator{
         catch (IOException e) {
             throw new PathException("unknown path", e);
         }
+    }
+
+    /**
+     * It will return the InputStream corresponding to the file depending on the extension given.
+     * If not found it will return an Exception
+     * @param extension format of the file expected
+     * @return InputStream of file if found
+     */
+    public static InputStream generateFileAsInputStream(String extension) {
+        InputStream inputStream = FileGenerator.class.getClassLoader().getResourceAsStream("file/base/base." + convert(extension));
+        if (inputStream == null) {
+            throw new HandleExtensionException("extension not handled");
+        }
+        return inputStream;
     }
 
     /**
