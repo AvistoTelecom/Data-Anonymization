@@ -14,7 +14,6 @@ public class StringTestModel {
     public static final String PATH_TO_FILE = "src/test/resources/dataTest.txt";
     public static final String PATTERN = "[a-z]{4}";
 
-    @RandomizeString(StringType.STRING)
     public String value;
 
     public StringTestModel(String value) {
