@@ -86,6 +86,43 @@ public class ObjectAnonymizer implements Randomizer {
         }
     }
 
+    private <T> boolean checkIfFieldIsAnonymizable(Class<?> clazz, T object, Field field) {
+        if (!clazz.isAnnotationPresent(Anonyme.class)) {
+            return false;
+        }
+        try {
+            clazz.getMethod(genSetterName(field), field.getType());
+            object.getClass().getMethod(genGetterName(field));
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public <T> boolean checkIfClassIsAnonymizable(T object) {
+        if (Objects.isNull(object)) {
+            return false;
+        }
+        for (Class<?> clazz = object.getClass(); clazz != null; clazz = clazz.getSuperclass()) {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.isAnnotationPresent(RandomizeNumber.class)
+                    && !checkIfFieldIsAnonymizable(clazz, object, field)) {
+                    return false;
+                } else if (field.isAnnotationPresent(RandomizeString.class)
+                    && !checkIfFieldIsAnonymizable(clazz, object, field)) {
+                    return false;
+                } else if (field.isAnnotationPresent(RandomizeFile.class)
+                    && !checkIfFieldIsAnonymizable(clazz, object, field)) {
+                    return false;
+                } else if (field.isAnnotationPresent(RandomizeEnum.class)
+                    && !checkIfFieldIsAnonymizable(clazz, object, field)) {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
     private <T> void callSetterMethod(T object, Field field, Object newValue) {
         Class<?> clazz = object.getClass();
         String setterName = genSetterName(field);
