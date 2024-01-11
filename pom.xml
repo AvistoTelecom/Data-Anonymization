@@ -11,13 +11,12 @@
     <description>
         This library has for main purpose to allow anonymization of Object by using annotation
     </description>
-    <url>todo</url>
+    <url>https://github.com/AVISTOTELECOM/Data-Anonymization</url>
 
     <licenses>
         <license>
-            <name>GNU Lesser General Public License (LGPL), Version 3.0</name>
-            <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
-            <distribution>repo</distribution>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
@@ -32,12 +31,17 @@
             <organization>Advans-group</organization>
             <email>zack.de-saint-pern@advans-group.com</email>
         </developer>
+        <developer>
+            <name>Martin Rech</name>
+            <organization>Advans-group</organization>
+            <email>martin.rech@avisto.com</email>
+        </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:https://versioning.advans-group.com/desaintpern/anonymization.git</connection>
-        <developerConnection>scm:git:https://versioning.advans-group.com/desaintpern/anonymization.git</developerConnection>
-        <url>https://versioning.advans-group.com/desaintpern/anonymization/-/tree/main</url>
+        <connection>scm:git:git://github.com/AVISTOTELECOM/Data-Anonymization.git</connection>
+        <developerConnection>scm:git:ssh://github.com:AVISTOTELECOM/Data-Anonymization.git</developerConnection>
+        <url>https://github.com/AVISTOTELECOM/Data-Anonymization</url>
     </scm>
 
     <profiles>
