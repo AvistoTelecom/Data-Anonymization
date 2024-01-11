@@ -836,8 +836,6 @@ If a field has null value it will stay null.
 The library works on Java 11+.
 
 ## Contributing
-/!\ TO COMPLETE
-
+Zack de Saint Pern, Martin Rech.
 ## License
-/!\ TO COMPLETE 
-
+Apache License : Version 2.0, January 2004
