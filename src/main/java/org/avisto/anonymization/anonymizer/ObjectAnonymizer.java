@@ -46,6 +46,7 @@ public class ObjectAnonymizer implements Randomizer {
 
     /**
      * anonymize the object given.
+     * @param <T> the type of the object to anonymize
      * @param object object to anonymize
      */
     public <T> void anonymize(T object) {
@@ -60,6 +61,7 @@ public class ObjectAnonymizer implements Randomizer {
 
     /**
      * anonymize the objects given.
+     * @param <T> the type of the collection to anonymize
      * @param objectCollection objects to anonymize
      */
     public <T> void anonymize(Iterable<T> objectCollection) {

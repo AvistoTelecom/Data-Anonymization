@@ -8,6 +8,7 @@ public interface Generator {
     /**
      * select a random value in the parameter origin
      * @param origin List of possible value
+     * @param <T> the type of the collection
      * @return the random value selected in origin
      */
     static <T> T generateValueFromCollection(List<T> origin) {
@@ -17,6 +18,7 @@ public interface Generator {
     /**
      * select a random value in the parameter origin
      * @param origin array of possible value
+     * @param <T> the type of the collection
      * @return the random value selected in origin
      */
     static <T> T generateValueFromCollection(T[] origin) {
