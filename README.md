@@ -1,3 +1,5 @@
+<img src="assets/logo_avisto.png" alt="Logo Avisto" width="270" height="173" />
+
 # Anonymization
 
 ## Description 🔍
