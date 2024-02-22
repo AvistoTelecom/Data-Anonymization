@@ -1,6 +1,6 @@
 # Anonymization
 
-## Description
+## Description 🔍
 
 This document depicts the sensitive data randomization library.
 For this purpose, this library gives several tools to achieve anonymization.
@@ -11,11 +11,11 @@ Below, the plan:
 
 The first one is by using annotation, the second one is by using utility class available.
 
-## Installation
+## Installation ⬇️
 [Maven Repository](https://mvnrepository.com/artifact/io.github.avistotelecom/data-anonymization) \
 [Maven Central](https://central.sonatype.com/artifact/io.github.avistotelecom/data-anonymization)
 
-## Usage
+## Usage ✋
 To allow the **ObjectAnonymizer** to anonymize your Object, the Class must be annotated with @Anonyme.
 
 Then all fields that need to be anonymized must have the annotation depending on the field type.
@@ -808,7 +808,7 @@ public class Main {
 
 </details>
 
-## Limitations
+## Limitations 🐧
 
 **Table of all handled types**
 
@@ -835,7 +835,7 @@ If a field has null value it will stay null.
 
 The library works on Java 11+.
 
-## Contributing
+## Contributing 👯
 Zack de Saint Pern, Martin Rech.
-## License
+## License 📃
 Apache License : Version 2.0, January 2004
