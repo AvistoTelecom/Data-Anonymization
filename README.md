@@ -12,8 +12,8 @@ Below, the plan:
 The first one is by using annotation, the second one is by using utility class available.
 
 ## Installation
-
-/!\ à compléter 
+[Maven Repository](https://mvnrepository.com/artifact/io.github.avistotelecom/data-anonymization) 
+[Maven Central](https://central.sonatype.com/artifact/io.github.avistotelecom/data-anonymization)
 
 ## Usage
 To allow the **ObjectAnonymizer** to anonymize your Object, the Class must be annotated with @Anonyme.
