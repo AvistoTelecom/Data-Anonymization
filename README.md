@@ -829,7 +829,7 @@ The regex generation is based on library [RgxGen version 1.4](https://github.com
 
 Getter and Setter must be declared with a name format: setFieldName, getFieldName. 
 
-This library works with default getter and setter built with Lombok.
+This library works with default getter and setter built with (Lombok)[https://github.com/projectlombok/lombok].
 
 If a field has null value it will stay null.
 
