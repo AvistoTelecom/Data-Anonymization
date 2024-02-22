@@ -12,7 +12,7 @@ Below, the plan:
 The first one is by using annotation, the second one is by using utility class available.
 
 ## Installation
-[Maven Repository](https://mvnrepository.com/artifact/io.github.avistotelecom/data-anonymization) 
+[Maven Repository](https://mvnrepository.com/artifact/io.github.avistotelecom/data-anonymization) \
 [Maven Central](https://central.sonatype.com/artifact/io.github.avistotelecom/data-anonymization)
 
 ## Usage
