@@ -1,6 +1,6 @@
 <img src="assets/logo_avisto.png" alt="Logo Avisto" width="270" height="173" />
 
-# Anonymization
+# Data-Anonymization
 
 ## Description 🔍
 
@@ -13,9 +13,11 @@ Below, the plan:
 
 The first one is by using annotation, the second one is by using utility class available.
 
-## Installation ⬇️
+## Requirements ⬇️
 [Maven Repository](https://mvnrepository.com/artifact/io.github.avistotelecom/data-anonymization) \
 [Maven Central](https://central.sonatype.com/artifact/io.github.avistotelecom/data-anonymization)
+
+This library is compatible with Java11+, so you can install it simply by adding its dependencies to your build.gradle / pom.xml.
 
 ## Usage ✋
 To allow the **ObjectAnonymizer** to anonymize your Object, the Class must be annotated with @Anonyme.
@@ -827,15 +829,9 @@ public class Main {
 |-----------:|
 |        all |
 
-The regex generation is based on library [RgxGen version 1.4](https://github.com/curious-odd-man/RgxGen/tree/1.4).
-
-Getter and Setter must be declared with a name format: setFieldName, getFieldName. 
-
-This library works with default getter and setter built with [Lombok](https://github.com/projectlombok/lombok).
-
+Getter and Setter must be declared with a name format: setFieldName, getFieldName.\
+This library works with default getter and setter built with [Lombok](https://github.com/projectlombok/lombok).\
 If a field has null value it will stay null.
-
-The library works on Java 11+.
 
 ## Contributing 👯
 Zack de Saint Pern, Martin Rech.
