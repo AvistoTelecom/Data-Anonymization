@@ -16,7 +16,15 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
       - name: Publish package
-        run: mvn --batch-mode deploy
+        run: |
+          mvn clean install
+
+          # Conditionally deploy to Maven Central only on successful builds
+          if [ ${{ job.status }} == 'success' ]; then
+            mvn deploy
+          else
+            echo "Build failed. Skipping deployment to Maven Central."
+          fi
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
