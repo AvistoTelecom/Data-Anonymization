@@ -15,13 +15,20 @@ jobs:
           server-id: ossrh
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
+
+      - name: Extract release version
+        run: |
+          export RELEASE_VERSION="${{ github.event.release.tag_name }}"
+          echo "Release Version: $RELEASE_VERSION"
+        id: extract_release_version
+
       - name: Publish package
         run: |
           mvn clean install
 
           # Conditionally deploy to Maven Central only on successful builds
           if [ ${{ job.status }} == 'success' ]; then
-            mvn deploy
+            mvn deploy -DreleaseVersion=$RELEASE_VERSION
           else
             echo "Build failed. Skipping deployment to Maven Central."
           fi
