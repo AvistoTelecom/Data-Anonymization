@@ -28,7 +28,7 @@ jobs:
         server-username: OSSRH_USERNAME
         server-password: OSSRH_PASSWORD
         gpg-private-key: GPG_SIGNING_KEY
-        gpg-passphrase: GPG_SIGNING_PASSPHRASE
+        GPG_PASSPHRASE: GPG_SIGNING_PASSPHRASE
         cache: 'maven'
       env:
         GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
