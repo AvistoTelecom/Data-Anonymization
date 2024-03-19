@@ -28,6 +28,7 @@ jobs:
         server-password: OSSRH_PASSWORD
         gpg-private-key: GPG_SIGNING_KEY
         gpg-passphrase: GPG_SIGNING_PASSPHRASE
+        cache: 'maven'
       env:
         GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
         GPG_SIGNING_PASSPHRASE: ${{ secrets.GPG_SIGNING_PASSPHRASE }}
@@ -40,14 +41,14 @@ jobs:
         echo "Release Version: $RELEASE_VERSION"
       id: extract_release_version
 
-    - name: Maven build
-      run: mvn clean package -Prelease
+    - name: Build & Deploy
+      run: mvn clean install -Ppipeline
 
     - name: Publish to Maven Central
       if: success()
       run: |
         if [ ${{ job.status }} == 'success' ]; then
-          mvn --no-transfer-progress --batch-mode deploy -DreleaseVersion=$RELEASE_VERSION
+          mvn -U -B clean deploy -Prelease -DreleaseVersion=$RELEASE_VERSION
         else
           echo "Build failed. Skipping deployment to Maven Central."
         fi
