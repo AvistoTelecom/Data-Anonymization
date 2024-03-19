@@ -7,7 +7,7 @@
     <name>Data-Anonymization</name>
     <groupId>io.github.avistotelecom</groupId>
     <artifactId>data-anonymization</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <description>
         This library has for main purpose to allow anonymization of Object by using annotations
     </description>
