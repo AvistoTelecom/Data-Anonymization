@@ -48,7 +48,7 @@ jobs:
       if: success()
       run: |
         if [ ${{ job.status }} == 'success' ]; then
-          mvn --no-transfer-progress --batch-mode clean deploy -Prelease -DreleaseVersion=$RELEASE_VERSION -DskipTests
+          mvn --no-transfer-progress --batch-mode -Dgpg.passphrase=${{ secrets.GPG_SIGNING_KEY }} clean deploy -Prelease -DreleaseVersion=$RELEASE_VERSION -DskipTests
         else
           echo "Build failed. Skipping deployment to Maven Central."
         fi
