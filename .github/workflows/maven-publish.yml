@@ -27,14 +27,9 @@ jobs:
         server-id: ossrh
         server-username: OSSRH_USERNAME
         server-password: OSSRH_PASSWORD
-        gpg-private-key: GPG_SIGNING_KEY
-        GPG_PASSPHRASE: GPG_SIGNING_PASSPHRASE
+        gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
+        gpg-passphrase: GPG_SIGNING_PASSPHRASE
         cache: 'maven'
-      env:
-        GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
-        GPG_SIGNING_PASSPHRASE: ${{ secrets.GPG_SIGNING_PASSPHRASE }}
-        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-        OSSRH_PASSWORD: ${{ secrets.OSSRH_PWD }}
 
     - name: Extract release version
       run: |
