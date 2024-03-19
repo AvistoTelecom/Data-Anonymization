@@ -14,15 +14,16 @@ jobs:
       packages: write
       
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v4
 
-    - name: Set up JDK
-      id: setup-jdk
-      uses: actions/setup-java@v2
+    - name: Setup Java
+      uses: actions/setup-java@v4
       with:
-        distribution: 'adopt'
-        java-version: 11
+        distribution: 'temurin'
+        java-package: 'jdk'
+        java-version: '11'
+        check-latest: true
         server-id: ossrh
         server-username: OSSRH_USERNAME
         server-password: OSSRH_PASSWORD
