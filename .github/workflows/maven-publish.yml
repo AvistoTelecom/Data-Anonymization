@@ -19,9 +19,12 @@ jobs:
       id: setup-jdk
       uses: actions/setup-java@v4
       with:
-        java-version: '11'
-        distribution: 'temurin'
-        cache: maven
+        java-version: 11
+        server-id: ossrh
+        server-username: OSSRH_USERNAME
+        server-password: OSSRH_PASSWORD
+        gpg-private-key: GPG_SIGNING_KEY
+        gpg-passphrase: GPG_SIGNING_PASSPHRASE
 
     - name: Extract release version
       run: |
@@ -30,13 +33,13 @@ jobs:
       id: extract_release_version
 
     - name: Maven build
-      run: mvn clean install -Prelease
+      run: mvn clean package -Prelease
 
     - name: Publish to Maven Central
       if: success()
       run: |
         if [ ${{ job.status }} == 'success' ]; then
-          mvn deploy -DreleaseVersion=$RELEASE_VERSION
+          mvn --no-transfer-progress --batch-mode deploy -DreleaseVersion=$RELEASE_VERSION
         else
           echo "Build failed. Skipping deployment to Maven Central."
         fi
