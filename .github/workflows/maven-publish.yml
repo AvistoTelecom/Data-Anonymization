@@ -54,7 +54,8 @@ jobs:
               -Dgpg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }} \
               clean deploy \
               -DreleaseVersion=$RELEASE_VERSION \
-              -DskipTests
+              -DskipTests \
+              -Prelease
         else
           echo "Build failed. Skipping deployment to Maven Central."
         fi
